@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+	.shadow-custom {
+		box-shadow: 0 2px 10px rgba(3, 82, 86, 0.5);
+	}
+
+	.tap-transparent {
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.linecap-round {
+		stroke-linecap: round;
+	}
+}
