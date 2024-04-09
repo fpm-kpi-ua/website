@@ -1,8 +1,9 @@
-import { Lang } from "~/shared/types";
+import type { Lang } from "~/shared/types";
 
 export const getOppositeLanguage = (lang: Lang): Lang =>
 	lang === "en" ? "uk" : "en";
-export const parseLang = (lang?: string) => (lang === "en" ? "en" : "uk");
+
+export const parseLang = (lang?: string): Lang => (lang === "en" ? "en" : "uk");
 
 export const langLink = (lang: string | undefined, path?: string) => {
 	const parsedLang = parseLang(lang);

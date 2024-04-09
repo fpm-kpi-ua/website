@@ -1,4 +1,4 @@
-import { Polyfill } from "~/shared/types";
+import type { Polyfill } from "~/shared/types";
 
 export const existingSections = [
 	"about",

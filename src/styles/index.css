@@ -1,3 +1,69 @@
-@import 'tailwind.css';
-@import 'variables.css';
+@import "tailwind.css";
+@import "variables.css";
 @import "font.css";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  overflow-x: hidden;
+  margin: 0;
+  /* transition: background-color 0.3s cubic-bezier(0, 0, 0.2, 1); */
+  /* color: var(--text-color); */
+  /* background-color: var(--background-color); */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "DaysOne", sans-serif;
+  text-wrap: balance;
+  scroll-margin-top: calc(
+    theme("spacing.sides-padding") + theme("spacing.header-height")
+  );
+}
+
+h1,
+.h1 {
+  font-size: 2rem;
+  line-height: 1.125em;
+}
+
+h2,
+.h2 {
+  font-size: 1.75rem;
+  line-height: 1.25em;
+}
+
+h3,
+.h3 {
+  font-size: 1.5rem;
+  line-height: 1.25em;
+}
+
+h4,
+.h4 {
+  font-size: 1.125rem;
+  line-height: 1.22em;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible,
+header a:focus-visible {
+  transition-duration: 0s;
+  outline: 3px solid rgba(var(--primary-color) / 0.5);
+  outline-offset: 4px;
+}
+
+::selection {
+  background-color: rgba(var(--primary-color) / 0.4);
+}

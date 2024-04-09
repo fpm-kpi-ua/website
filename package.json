@@ -1,29 +1,28 @@
 {
-  "name": "fam-solid",
-  "type": "module",
-  "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start"
-  },
-  "dependencies": {
-    "@mdx-js/mdx": "^2.3.0",
-    "@solid-primitives/i18n": "^2.0.1",
-    "@solidjs/meta": "^0.29.3",
-    "@solidjs/router": "^0.12.4",
-    "@solidjs/start": "^0.6.0",
-    "@vinxi/plugin-mdx": "^3.7.1",
-    "solid-js": "^1.8.15",
-    "solid-mdx": "^0.0.7",
-    "vinxi": "^0.3.4"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^1.5.3",
-    "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1"
-  }
+	"name": "fam-solid",
+	"type": "module",
+	"scripts": {
+		"dev": "vinxi dev",
+		"build": "vinxi build",
+		"start": "vinxi start"
+	},
+	"dependencies": {
+		"@mdx-js/mdx": "^2.3.0",
+		"@solid-primitives/i18n": "^2.1.1",
+		"@solidjs/meta": "^0.29.3",
+		"@solidjs/router": "^0.13.1",
+		"@solidjs/start": "^0.7.7",
+		"@vinxi/plugin-mdx": "^3.7.1",
+		"solid-js": "^1.8.16",
+		"solid-mdx": "^0.0.7",
+		"vinxi": "^0.3.11"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.6.3",
+		"postcss": "^8.4.38",
+		"tailwindcss": "^3.4.2"
+	},
+	"engines": {
+		"node": ">=18"
+	}
 }

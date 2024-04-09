@@ -1,13 +1,13 @@
 @font-face {
-	font-family: 'DaysOne';
-	font-style: normal;
-	font-weight: normal;
-	font-display: swap;
-	src:
-		url('../shared/assets/fonts/DaysOne.woff2') format('woff2'),
-		url('../shared/assets/fonts/DaysOne.woff') format('woff');
+  font-family: "DaysOne";
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src:
+    url("/fonts/DaysOne.woff2") format("woff2"),
+    url("/fonts/DaysOne.woff") format("woff");
 }
 
 :root {
-	font-size: max(calc(12px + 1vmin), 18px);
+  font-size: max(calc(12px + 1vmin), 18px);
 }

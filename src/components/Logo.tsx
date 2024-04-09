@@ -1,15 +1,15 @@
-import { useAppState } from "~/app-context";
 import { langLink } from "~/shared/lang";
+import { useTranslation } from "~/shared/useTranslation";
 
 export function Logo() {
-	const { t, lang } = useAppState();
+	const { t, lang } = useTranslation("common");
 	return (
 		<a
-			href={langLink(lang)}
-			hreflang={lang}
-			class="font-heading text-primary text-2xl/4 font-bold hover:underline"
+			href={langLink(lang())}
+			hreflang={lang()}
+			class="font-heading text-2xl/4"
 		>
-			{t("home.meta.title")}
+			{t("FPM")}
 		</a>
 	);
 }

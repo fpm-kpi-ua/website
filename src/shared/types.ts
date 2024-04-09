@@ -1,4 +1,4 @@
-import { type existingSections } from "~/shared/constants";
+import type { existingSections } from "~/shared/constants";
 
 export type Lang = "en" | "uk";
 export type Section = (typeof existingSections)[number];

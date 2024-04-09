@@ -1,27 +1,14 @@
-import { A } from "@solidjs/router";
-import { useAppState } from "~/app-context";
-import { Logo } from "~/components/Logo";
-import { existingSections } from "~/shared/constants";
-import { langLink } from "~/shared/lang";
-
+import { Logo } from "./Logo";
+import { Menu } from "./Menu";
+import { Nav } from "./Nav";
 
 export function Header() {
-	const { t,lang } = useAppState();
 	return (
-		<header class="h-header bg-background-secondary shadow-custom fixed top-0 z-10 w-full px-4 py-0">
-			<div class="page-width h-header flex items-center justify-between">
+		<header class="fixed top-0 z-10 h-header-height w-full bg-background-secondary px-sides-padding shadow">
+			<div class="mx-auto flex h-full max-w-max-page-width items-center justify-between">
 				<Logo />
-				<nav>
-					<ul>
-						{existingSections.map((section) => (
-							<li>
-								<A href={langLink(lang, section)}>
-									{t(`sections.${section}`)}
-								</A>
-							</li>
-						))}
-					</ul>
-				</nav>
+				<Nav isPopup={false} />
+				<Menu />
 			</div>
 		</header>
 	);

@@ -1,0 +1,65 @@
+@font-face {
+  font-family: "Pi";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:
+    url("/fonts/Pi.woff2") format("woff2"),
+    url("/fonts/Pi.woff") format("woff");
+}
+
+/* Specialities */
+@media (min-width: 769px) {
+  @supports not selector(:has(:focus-visible, :active)) {
+    .center-card-scale .card:nth-of-type(2) {
+      transform: scale(1.05);
+    }
+  }
+
+  .center-card-scale:not(:has(.card:where(:hover, :focus-within)))
+    .card:nth-of-type(2) {
+    transform: scale(1.05);
+  }
+
+  .center-card-scale .card:hover,
+  .center-card-scale .card:has(:focus-visible, :active) {
+    transform: scale(1.07);
+  }
+}
+/* News */
+
+.news-areas {
+  grid-template-areas:
+    "title news"
+    "icon  news"
+    "empty button";
+}
+
+@media (max-width: 768px) {
+  .news-areas {
+    grid-template-areas:
+      "title title"
+      "news  news"
+      "icon  button";
+  }
+
+  .news-area .card:last-of-type {
+    display: none;
+  }
+}
+
+.title-area {
+  grid-area: title;
+}
+
+.news-area {
+  grid-area: news;
+}
+
+.icon-area {
+  grid-area: icon;
+}
+
+.button-area {
+  grid-area: button;
+}
