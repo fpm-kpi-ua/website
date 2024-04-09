@@ -1,9 +1,14 @@
 import { Meta, Title } from "@solidjs/meta";
-import type { RouteLoadFuncArgs } from "@solidjs/router";
+import { type RouteLoadFuncArgs, cache, createAsync } from "@solidjs/router";
+import { desc, eq } from "drizzle-orm";
+import { For } from "solid-js";
 import { ProcessorIcon } from "~/components/Icons/ProcessorIcon";
 import { ThemedIcon } from "~/components/ThemedIcon";
+import { db } from "~/drizzle/db";
+import { news } from "~/drizzle/schema";
 import { breakpoints } from "~/shared/constants";
 import { langLink, parseLang } from "~/shared/lang";
+import type { Lang } from "~/shared/types";
 import { getTranslations, useTranslation } from "~/shared/useTranslation";
 import "./(home).css";
 
@@ -12,8 +17,26 @@ export const route = {
 		getTranslations(parseLang(location.pathname.split("/")[1]), "home"),
 };
 
+const getNews = cache(async (lang: Lang, offset: number, limit: number) => {
+	"use server";
+	return (
+		await db
+			.select()
+			.from(news)
+			.where(eq(news.lang, lang))
+			.orderBy(desc(news.createdAt))
+			.offset(offset)
+			.limit(limit)
+	).map((n) => {
+		n.source =
+			n.source.length > 200 ? `${n.source.slice(0, 200)}...` : n.source;
+		return n;
+	});
+}, "news");
+
 export default function Home() {
 	const { t, lang } = useTranslation("home");
+	const news = createAsync(() => getNews(lang(), 0, 3));
 	return (
 		<>
 			<Title>{t("meta.title")}</Title>
@@ -38,7 +61,6 @@ export default function Home() {
 						class="-translate-y-2 mb-4 flex h-28 scale-[1.3] justify-center md:h-60 md:scale-[1.2]"
 					/>
 				</section>
-
 				<section class="mb-40 grid">
 					<h2 class="text-center text-primary">{t("specialities.h2")}</h2>
 					<div class="center-card-scale mx-0 my-8 grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-3">
@@ -115,15 +137,30 @@ export default function Home() {
 						{t("specialities.more")}
 					</a>
 				</section>
-
 				<section class="news-areas grid gap-4 md:gap-x-24 md:gap-y-4">
 					<h2 class="title-area text-center text-primary">{t("news.h2")}</h2>
+					<div class="news-area grid gap-y-4">
+						<For each={news()}>
+							{(n) => (
+								<article class="card relative m-0 h-min w-full overflow-hidden rounded bg-background-secondary p-6 shadow transition">
+									<h3 class="m-0 text-lg">
+										<a
+											href={langLink(n.lang, `information/news/${n.id}`)}
+											class="card__link tap-transparent text-text before:absolute before:inset-0 before:rounded-lg hover:opacity-100 focus-visible:outline-none before:content-['']"
+										>
+											{n.title}
+										</a>
+									</h3>
+									<p class="mx-0 mt-2">{n.source}</p>
+								</article>
+							)}
+						</For>
+					</div>
 
 					<ThemedIcon
 						path="person/8"
 						class="icon-area h-60 self-end md:h-auto"
 					/>
-
 					<a
 						href={langLink(lang(), "information/news")}
 						class="button button--primary button-area self-end md:w-fit"

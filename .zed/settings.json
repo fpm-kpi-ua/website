@@ -1,0 +1,59 @@
+{
+	"tab_size": 2,
+	"hard_tabs": true,
+	"formatter": "auto",
+	"language_overrides": {
+		"JavaScript": {
+			"formatter": {
+				"external": {
+					"command": "./node_modules/.bin/biome",
+					"arguments": [
+						"check",
+						"--stdin-file-path",
+						"{buffer_path}",
+						"--apply-unsafe"
+					]
+				}
+			}
+		},
+		"TypeScript": {
+			"formatter": {
+				"external": {
+					"command": "./node_modules/.bin/biome",
+					"arguments": [
+						"check",
+						"--stdin-file-path",
+						"{buffer_path}",
+						"--apply-unsafe"
+					]
+				}
+			}
+		},
+		"TSX": {
+			"formatter": {
+				"external": {
+					"command": "./node_modules/.bin/biome",
+					"arguments": [
+						"check",
+						"--stdin-file-path",
+						"{buffer_path}",
+						"--apply-unsafe"
+					]
+				}
+			}
+		},
+		"JSON": {
+			"formatter": {
+				"external": {
+					"command": "./node_modules/.bin/biome",
+					"arguments": [
+						"check",
+						"--stdin-file-path",
+						"{buffer_path}",
+						"--apply-unsafe"
+					]
+				}
+			}
+		}
+	}
+}
