@@ -9,7 +9,7 @@
 }
 
 /* Specialities */
-@media (min-width: 769px) {
+@media (min-width: theme("screens.md")) {
   @supports not selector(:has(:focus-visible, :active)) {
     .center-card-scale .card:nth-of-type(2) {
       transform: scale(1.05);
@@ -26,40 +26,19 @@
     transform: scale(1.07);
   }
 }
-/* News */
 
 .news-areas {
   grid-template-areas:
-    "title news"
-    "icon  news"
-    "empty button";
+    "title title"
+    "news news"
+    "icon button";
 }
 
-@media (max-width: 768px) {
+@media (min-width: theme("screens.md")) {
   .news-areas {
     grid-template-areas:
-      "title title"
-      "news  news"
-      "icon  button";
+      "title news"
+      "icon news"
+      "empty button";
   }
-
-  .news-area .card:last-of-type {
-    display: none;
-  }
-}
-
-.title-area {
-  grid-area: title;
-}
-
-.news-area {
-  grid-area: news;
-}
-
-.icon-area {
-  grid-area: icon;
-}
-
-.button-area {
-  grid-area: button;
 }

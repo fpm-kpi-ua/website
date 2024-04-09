@@ -20,7 +20,10 @@ export function LanguageSwitcher(props: LanguageSwitcherProps) {
 	return (
 		<span class={cx("flex items-center font-heading lg:m-0", props.class)}>
 			<a
-				class={cx("mr-1", lang() === "uk" ? "text-primary" : "text-text")}
+				class={cx(
+					"mr-1 leading-4",
+					lang() === "uk" ? "text-primary" : "text-text",
+				)}
 				href={ukLink()}
 				lang="uk"
 				hreflang="uk"
@@ -28,7 +31,7 @@ export function LanguageSwitcher(props: LanguageSwitcherProps) {
 			>
 				Укр
 			</a>
-			<svg
+			{/* <svg
 				width="0.1rem"
 				height="1.3rem"
 				viewBox="0 0 2 30"
@@ -44,9 +47,12 @@ export function LanguageSwitcher(props: LanguageSwitcherProps) {
 					stroke-width="2"
 					stroke-linecap="round"
 				/>
-			</svg>
+			</svg> */}
 			<a
-				class={cx("ml-1", lang() === "en" ? "text-primary" : "text-text")}
+				class={cx(
+					"ml-1 leading-4",
+					lang() === "en" ? "text-primary" : "text-text",
+				)}
 				href={enLink()}
 				lang="en"
 				hreflang="en"

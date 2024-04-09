@@ -6,21 +6,41 @@
   a {
     @apply text-primary;
 
-    &:hover {
-      @apply underline;
+    &:not(.btn, .card__link) {
+      @apply hover:underline;
     }
-    &:focus-visible {
+    &:not(.btn):focus-visible {
       border-radius: theme("spacing[0.5]");
     }
   }
 }
 
 @layer utilities {
-  .tap-transparent {
-    -webkit-tap-highlight-color: transparent;
-  }
-
   .linecap-round {
     stroke-linecap: round;
+  }
+  .highlight-tap {
+    -webkit-tap-highlight-color: rgb(var(--primary-color) / 0.3);
+  }
+}
+
+@layer components {
+  button,
+  .btn {
+    @apply font-heading text-primary hover:border-primary active:border-primary;
+    font-size: 0.95rem;
+    line-height: normal;
+    display: inline-block;
+    height: fit-content;
+    touch-action: manipulation;
+    user-select: none;
+    padding: 0.5em 1.7em;
+    text-align: center;
+    text-decoration: none;
+    border: 0.1rem solid var(--gray-color);
+    border-radius: calc(2 * theme(borderRadius.DEFAULT));
+  }
+  .btn--primary {
+    @apply text-background bg-primary border-transparent hover:bg-opacity-80 active:bg-opacity-80 hover:border-transparent active:border-transparent;
   }
 }

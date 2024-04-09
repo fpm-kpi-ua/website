@@ -5,11 +5,6 @@ const { default: mdx } = pkg;
 
 export default defineConfig({
 	extensions: ["mdx", "md"],
-	server: {
-		prerender: {
-			crawlLinks: true,
-		},
-	},
 	vite: {
 		plugins: [
 			mdx.withImports({})({

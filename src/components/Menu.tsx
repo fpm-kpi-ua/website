@@ -13,6 +13,10 @@ export function Menu() {
 				id="menu"
 				class="menu__popup"
 				popover="auto"
+				onClick={(e) => {
+					// @ts-ignore
+					e.currentTarget.hidePopover();
+				}}
 			>
 				<div class="grid justify-center gap-4 p-sides-padding pt-1">
 					<Nav isPopup />
@@ -23,9 +27,13 @@ export function Menu() {
 				id="menu-button"
 				popovertarget="menu"
 				aria-label={t("aria.toggleMenu")}
-				class="width-4 relative hidden items-center justify-center border-none p-0 lg:flex"
+				class="flex items-center justify-center rounded-sm border-none p-0"
 			>
-				<svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+				<svg
+					viewBox="6 10.75 21 10"
+					fill="none"
+					class="linecap-round h-7 w-9 *:fill-primary *:duration-200"
+				>
 					<rect id="menu__rect-1" x="6" y="9.5" width="21" height="2" rx="1" />
 					<rect id="menu__rect-2" x="6" y="15" width="21" height="2" rx="1" />
 					<rect id="menu__rect-3" x="6" y="20.5" width="21" height="2" rx="1" />

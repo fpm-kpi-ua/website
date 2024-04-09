@@ -1,0 +1,26 @@
+footer a {
+  font-family: "DaysOne", sans-serif;
+  line-height: 1;
+  width: fit-content;
+  height: fit-content;
+  color: theme("colors.background");
+  &:focus-visible {
+    outline-color: theme("colors.background");
+  }
+}
+
+.footer__content {
+  grid-template-areas:
+    "logo social"
+    "links-1 links-1"
+    "links-2 links-2"
+    "copyright copyright";
+}
+
+@media (min-width: theme("screens.md")) {
+  .footer__content {
+    grid-template-areas:
+      "logo links-1 links-2 social"
+      "copyright copyright copyright copyright";
+  }
+}

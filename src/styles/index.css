@@ -11,9 +11,6 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
   margin: 0;
-  /* transition: background-color 0.3s cubic-bezier(0, 0, 0.2, 1); */
-  /* color: var(--text-color); */
-  /* background-color: var(--background-color); */
 }
 
 h1,
@@ -57,10 +54,9 @@ h4,
   outline: none;
 }
 
-:focus-visible,
-header a:focus-visible {
+:focus-visible {
   transition-duration: 0s;
-  outline: 3px solid rgba(var(--primary-color) / 0.5);
+  outline: 3px solid rgb(var(--primary-color));
   outline-offset: 4px;
 }
 

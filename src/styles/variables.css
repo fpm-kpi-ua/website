@@ -30,7 +30,7 @@
 @media (prefers-color-scheme: light) {
   :root {
     --text-color: var(--black-color);
-    --background-color: white;
+    --background-color: 255 255 255;
     --secondary-background-color: var(--white-color);
     --primary-color: 16 119 128;
     --dynamic-gray-color: #696969;

@@ -1,0 +1,18 @@
+@supports selector(:has(*)) {
+  .card h3 a:focus-visible {
+    outline: none;
+    /* scroll-margin-bottom: 20rem; */
+    /* scroll-margin-top: 5rem; */
+  }
+  .card:has(h3 a:focus-visible) {
+    transition:
+      var(--transition),
+      outline-offset 0s,
+      outline 0s;
+    outline: 3px solid rgb(var(--primary-color));
+    outline-offset: 4px;
+  }
+}
+.card h3 a:hover {
+  text-decoration: none;
+}

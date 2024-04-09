@@ -5,7 +5,7 @@ export default function NotFound() {
 
 	return (
 		<>
-			<h1 class="font-heading text-6xl">{t("errors.404.title")}</h1>
+			<h1 class="mt-8 font-heading text-6xl">{t("errors.404.title")}</h1>
 			<p class="mt-8">{t("errors.404.description")}</p>
 		</>
 	);
