@@ -63,3 +63,8 @@ h4,
 ::selection {
   background-color: rgba(var(--primary-color) / 0.4);
 }
+
+.table__wrapper {
+  overflow-x: auto;
+  max-width: calc(100vw - 2rem);
+}

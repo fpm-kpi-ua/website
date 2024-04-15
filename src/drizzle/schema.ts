@@ -6,8 +6,7 @@ import {
 	text,
 } from "drizzle-orm/sqlite-core";
 import { ulid } from "ulid";
-import type { existingSections } from "~/shared/constants";
-import type { Lang } from "~/shared/types";
+import type { Lang, Section } from "~/shared/types";
 
 export const users = sqliteTable("users", {
 	id: text("id").primaryKey().$defaultFn(ulid),
@@ -85,9 +84,7 @@ export const articles = sqliteTable(
 	"articles",
 	{
 		lang: text("lang").notNull().$type<Lang>(),
-		section: text("section")
-			.notNull()
-			.$type<(typeof existingSections)[number]>(),
+		section: text("section").notNull().$type<Section>(),
 		slug: text("slug").notNull(),
 		title: text("title").notNull(),
 		description: text("description").notNull(),

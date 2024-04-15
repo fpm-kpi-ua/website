@@ -13,59 +13,56 @@ import { db } from "~/drizzle/db";
 import { articles } from "~/drizzle/schema";
 import { existingSections } from "~/shared/constants";
 import { langLink } from "~/shared/lang";
-import type { Lang } from "~/shared/types";
+import type { Lang, Section } from "~/shared/types";
 import { useTranslation } from "~/shared/useTranslation";
 import "./index.css";
 // TODO: add error handling, add edit and create new article links
 
-const getSectionPreview = cache(
-	async (lang: Lang, section: (typeof existingSections)[number]) => {
-		"use server";
-		if (!existingSections.includes(section))
-			throw new Error("Such section does not exist");
-		const mv = db
-			.select({
-				lang: articles.lang,
-				section: articles.section,
-				slug: articles.slug,
-				maxVersion: max(articles.version).as("maxVersion"),
-			})
-			.from(articles)
-			.where(and(eq(articles.lang, lang), eq(articles.section, section)))
-			.groupBy(articles.lang, articles.section, articles.slug)
-			.as("maxVersions");
+const getSectionPreview = cache(async (lang: Lang, section: Section) => {
+	"use server";
+	if (!existingSections.includes(section))
+		throw new Error("Such section does not exist");
+	const mv = db
+		.select({
+			lang: articles.lang,
+			section: articles.section,
+			slug: articles.slug,
+			maxVersion: max(articles.version).as("maxVersion"),
+		})
+		.from(articles)
+		.where(and(eq(articles.lang, lang), eq(articles.section, section)))
+		.groupBy(articles.lang, articles.section, articles.slug)
+		.as("maxVersions");
 
-		return db
-			.select({
-				slug: articles.slug,
-				title: articles.title,
-				description: articles.description,
-			})
-			.from(articles)
-			.rightJoin(
-				mv,
-				and(
-					eq(articles.slug, mv.slug),
-					eq(articles.version, mv.maxVersion),
-					eq(articles.lang, mv.lang),
-					eq(articles.section, mv.section),
-				),
-			)
-			.where(
-				and(
-					eq(articles.lang, lang),
-					eq(articles.section, section),
-					eq(articles.isPublished, true),
-				),
-			)
-			.orderBy(articles.title)
-			.all();
-	},
-	"sections",
-);
+	return db
+		.select({
+			slug: articles.slug,
+			title: articles.title,
+			description: articles.description,
+		})
+		.from(articles)
+		.rightJoin(
+			mv,
+			and(
+				eq(articles.slug, mv.slug),
+				eq(articles.version, mv.maxVersion),
+				eq(articles.lang, mv.lang),
+				eq(articles.section, mv.section),
+			),
+		)
+		.where(
+			and(
+				eq(articles.lang, lang),
+				eq(articles.section, section),
+				eq(articles.isPublished, true),
+			),
+		)
+		.orderBy(articles.title)
+		.all();
+}, "sections");
 
 const images: Record<
-	(typeof existingSections)[number],
+	Section,
 	Record<number | "first" | "last", { class: string; path: string }>
 > = {
 	about: {
@@ -124,17 +121,14 @@ const images: Record<
 export const route = {
 	load: ({ location }: RouteLoadFuncArgs) => {
 		const [, lang, section] = location.pathname.split("/");
-		getSectionPreview(
-			lang as Lang,
-			section as (typeof existingSections)[number],
-		);
+		getSectionPreview(lang as Lang, section as Section);
 	},
 };
 
 export default function Sections() {
 	const params = useParams<{
 		lang: Lang;
-		section: (typeof existingSections)[number];
+		section: Section;
 	}>();
 	const articlesPreview = createAsync(() =>
 		getSectionPreview(params.lang, params.section),

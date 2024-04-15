@@ -64,9 +64,9 @@ export const Footer = () => {
 						<FacebookIcon class="size-12" />
 					</a>
 				</div>
-				<p class="mx-auto my-0 text-center text-background text-sm [grid-area:copyright]">
-					{t("footer.copyrights")}
-				</p>
+				{/* <p class="mx-auto my-0 text-center text-background text-sm [grid-area:copyright]"> */}
+				{/* {t("footer.copyrights")} */}
+				{/* </p> */}
 			</div>
 		</footer>
 	);

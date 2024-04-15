@@ -1,3 +1,4 @@
+import typography from "@tailwindcss/typography";
 import type { Config } from "tailwindcss";
 
 export default {
@@ -35,12 +36,29 @@ export default {
 				"background-secondary":
 					"rgb(var(--secondary-background-color) / <alpha-value>)",
 				text: "rgb(var(--text-color) / <alpha-value>)",
-				// text: "var(--text-color)",
-				// secondary: "var(--secondary-color)",
-				// background: "var(--background-color)",
-				// "background-secondary": "var(--secondary-background-color)"
 			},
+			typography: (theme) => ({
+				DEFAULT: {
+					css: {
+						"--tw-prose-body": theme("colors.text"),
+						"--tw-prose-links": "rgb(var(--primary-color))",
+						"--tw-prose-headings": "rgb(var(--primary-color))",
+						"--tw-prose-bold": "rgb(var(--text-color))",
+						"--tw-prose-bullets": "var(--gray-color)",
+						"--tw-prose-th-borders": "var(--gray-color)",
+						a: {
+							fontWeight: "inherit",
+							textDecoration: "none",
+						},
+						"thead th": {
+							color: "var(--tw-prose-bold)",
+							fontWeight: "600",
+							verticalAlign: "bottom",
+						},
+					},
+				},
+			}),
 		},
 	},
-	plugins: [],
+	plugins: [typography],
 } satisfies Config;
