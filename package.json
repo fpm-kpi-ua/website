@@ -10,11 +10,11 @@
     "@mdx-js/mdx": "^2.3.0",
     "@solid-primitives/i18n": "^2.1.1",
     "@solidjs/meta": "^0.29.3",
-    "@solidjs/router": "^0.13.1",
+    "@solidjs/router": "^0.13.2",
     "@solidjs/start": "^0.7.7",
     "@vinxi/plugin-mdx": "^3.7.1",
-    "better-sqlite3": "^9.4.3",
-    "drizzle-orm": "^0.30.6",
+    "better-sqlite3": "^9.5.0",
+    "drizzle-orm": "^0.30.8",
     "solid-js": "^1.8.16",
     "solid-mdx": "^0.0.7",
     "ua-parser-js": "^1.0.37",
@@ -22,7 +22,7 @@
     "vinxi": "^0.3.11"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.6.3",
+    "@biomejs/biome": "^1.6.4",
     "@types/better-sqlite3": "^7.6.9",
     "@types/ua-parser-js": "^0.7.39",
     "drizzle-kit": "^0.20.14",

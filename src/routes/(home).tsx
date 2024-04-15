@@ -66,8 +66,8 @@ export default function Home() {
 					<h2 class="text-center text-primary">{t("specialities.h2")}</h2>
 					<div class="center-card-scale mx-0 my-8 grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-3">
 						<ArticleCardWithIcon
-							title={t("specialities.113.title")!}
-							description={t("specialities.113.description")!}
+							title={t("specialities.113.title")}
+							description={t("specialities.113.description")}
 							href={langLink(
 								lang(),
 								"/about/specialities#spetsialnist-113-prykladna-matematyka",
@@ -82,8 +82,8 @@ export default function Home() {
 							}
 						/>
 						<ArticleCardWithIcon
-							title={t("specialities.121.title")!}
-							description={t("specialities.121.description")!}
+							title={t("specialities.121.title")}
+							description={t("specialities.121.description")}
 							href={langLink(
 								lang(),
 								"/about/specialities#spetsialnist-121-inzheneriia-prohramnoho-zabezpechennia",
@@ -98,8 +98,8 @@ export default function Home() {
 							}
 						/>
 						<ArticleCardWithIcon
-							title={t("specialities.123.title")!}
-							description={t("specialities.123.description")!}
+							title={t("specialities.123.title")}
+							description={t("specialities.123.description")}
 							href={langLink(
 								lang(),
 								"/about/specialities#spetsialnist-123-kompiuterna-inzheneriia",
@@ -136,7 +136,7 @@ export default function Home() {
 
 					<ThemedIcon
 						path="person/8"
-						class="h-60 self-end [grid-area:icon] md:h-auto"
+						class="max-h-60 self-end [grid-area:icon] md:max-h-fit"
 					/>
 					<a
 						href={langLink(lang(), "information/news")}

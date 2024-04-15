@@ -7,7 +7,7 @@ export function ArticleCard(props: {
 	href: string;
 }) {
 	return (
-		<article class="card highlight-tap hover:-translate-y-1 relative m-0 h-min w-full overflow-hidden rounded bg-background-secondary p-6 shadow transition">
+		<article class="card highlight-tap hover:-translate-y-1 relative m-0 size-full overflow-hidden rounded bg-background-secondary p-6 shadow transition">
 			<h3 class="m-0 text-lg">
 				<a
 					href={props.href}
@@ -28,7 +28,7 @@ export function ArticleCardWithIcon(props: {
 	icon: JSX.Element;
 }) {
 	return (
-		<article class="card highlight-tap relative m-0 grid h-full w-full overflow-hidden rounded bg-background-secondary p-6 shadow transition">
+		<article class="card highlight-tap relative m-0 grid size-full overflow-hidden rounded bg-background-secondary p-6 shadow transition">
 			{props.icon}
 			<h3 class="text-center">
 				<a

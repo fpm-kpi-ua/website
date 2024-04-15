@@ -28,6 +28,6 @@ export const useTranslation = <T extends keyof Modules = "common">(
 	const t = i18n.translator<i18n.Flatten<Modules[T]>>(
 		dict,
 		i18n.resolveTemplate,
-	);
+	) as i18n.Translator<i18n.Flatten<Modules[T]>>;
 	return { t, lang };
 };

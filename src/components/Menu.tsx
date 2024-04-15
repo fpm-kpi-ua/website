@@ -30,7 +30,7 @@ export function Menu() {
 				class="flex items-center justify-center rounded-sm border-none p-0"
 			>
 				<svg
-					viewBox="6 10.75 21 10"
+					viewBox="6 10.75 21 11"
 					fill="none"
 					class="linecap-round h-7 w-9 *:fill-primary *:duration-200"
 				>
