@@ -1,10 +1,7 @@
 import { StartServer, createHandler } from "@solidjs/start/server";
 import { Polyfills } from "./components/Polyfills";
-import { getPolyfills } from "./shared/polyfills";
 
-export default createHandler(({ request }) => {
-	const polyfills = getPolyfills(request.headers.get("user-agent") ?? "");
-
+export default createHandler(() => {
 	return (
 		<StartServer
 			document={({ assets, children, scripts }) => (
@@ -17,7 +14,7 @@ export default createHandler(({ request }) => {
 						/>
 						<link rel="icon" href="/icons/gorilla.svg" />
 						{assets}
-						<Polyfills assets={polyfills} />
+						<Polyfills />
 					</head>
 					<body class="bg-background text-text">
 						{children}
