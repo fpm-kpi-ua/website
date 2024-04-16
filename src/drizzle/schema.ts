@@ -5,11 +5,10 @@ import {
 	sqliteTable,
 	text,
 } from "drizzle-orm/sqlite-core";
-import { ulid } from "ulid";
 import type { Lang, Section } from "~/shared/types";
 
 export const users = sqliteTable("users", {
-	id: text("id").primaryKey().$defaultFn(ulid),
+	id: integer("id").primaryKey({ autoIncrement: true }),
 	email: text("email").unique("email_idx").notNull(),
 	password: text("password").notNull(),
 	salt: text("salt").notNull(),
@@ -70,7 +69,7 @@ export const contentManagers = sqliteTable("content_managers", {
 });
 
 export const news = sqliteTable("news", {
-	id: text("id").primaryKey().$defaultFn(ulid),
+	id: integer("id").primaryKey({ autoIncrement: true }),
 	title: text("title").notNull(),
 	source: text("source").notNull(),
 	html: text("html").notNull(),

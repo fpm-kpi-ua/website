@@ -17,7 +17,6 @@
 		"drizzle-orm": "^0.30.8",
 		"solid-js": "^1.8.16",
 		"solid-mdx": "^0.0.7",
-		"ulid": "^2.3.0",
 		"vinxi": "^0.3.11"
 	},
 	"devDependencies": {
