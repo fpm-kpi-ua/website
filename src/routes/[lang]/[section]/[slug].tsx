@@ -9,6 +9,7 @@ import { and, desc, eq } from "drizzle-orm";
 import { db } from "~/drizzle/db";
 import { articles } from "~/drizzle/schema";
 import { existingSections } from "~/shared/constants";
+import { parseLang } from "~/shared/lang";
 import type { Lang, Section } from "~/shared/types";
 
 const getArticle = cache(async (lang: Lang, section: Section, slug: string) => {
@@ -38,9 +39,8 @@ const getArticle = cache(async (lang: Lang, section: Section, slug: string) => {
 }, "article");
 
 export const route = {
-	load: ({ location }: RouteLoadFuncArgs) => {
-		const [, lang, section, slug] = location.pathname.split("/");
-		getArticle(lang as Lang, section as Section, slug);
+	load: ({ params }: RouteLoadFuncArgs) => {
+		getArticle(parseLang(params.lang), params.section as Section, params.slug);
 	},
 };
 

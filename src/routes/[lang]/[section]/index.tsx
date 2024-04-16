@@ -12,7 +12,7 @@ import { ThemedIcon } from "~/components/ThemedIcon";
 import { db } from "~/drizzle/db";
 import { articles } from "~/drizzle/schema";
 import { existingSections } from "~/shared/constants";
-import { langLink } from "~/shared/lang";
+import { langLink, parseLang } from "~/shared/lang";
 import type { Lang, Section } from "~/shared/types";
 import { useTranslation } from "~/shared/useTranslation";
 import "./index.css";
@@ -119,9 +119,8 @@ const images: Record<
 };
 
 export const route = {
-	load: ({ location }: RouteLoadFuncArgs) => {
-		const [, lang, section] = location.pathname.split("/");
-		getSectionPreview(lang as Lang, section as Section);
+	load: ({ params }: RouteLoadFuncArgs) => {
+		getSectionPreview(parseLang(params.lang), params.section as Section);
 	},
 };
 

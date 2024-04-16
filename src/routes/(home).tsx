@@ -1,6 +1,6 @@
 import { Meta, Title } from "@solidjs/meta";
 import { type RouteLoadFuncArgs, cache, createAsync } from "@solidjs/router";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { For } from "solid-js";
 import { ArticleCard, ArticleCardWithIcon } from "~/components/ArticleCard";
 import { ProcessorIcon } from "~/components/Icons/ProcessorIcon";
@@ -14,26 +14,25 @@ import { getTranslations, useTranslation } from "~/shared/useTranslation";
 import "./(home).css";
 
 export const route = {
-	load: ({ location }: RouteLoadFuncArgs) =>
-		getTranslations(parseLang(location.pathname.split("/")[1]), "home"),
+	load: ({ params }: RouteLoadFuncArgs) =>
+		getTranslations(parseLang(params.lang), "home"),
 };
 
 const getNews = cache(async (lang: Lang, offset: number, limit: number) => {
 	"use server";
-	return (
-		await db
-			.select()
-			.from(news)
-			.where(eq(news.lang, lang))
-			.orderBy(desc(news.createdAt))
-			.offset(offset)
-			.limit(limit)
-	).map((n) => {
-		n.source =
-			n.source.length > 200 ? `${n.source.slice(0, 200)}...` : n.source;
-		return n;
-	});
-}, "news");
+	return db
+		.select({
+			id: news.id,
+			title: news.title,
+			source: sql<string>`substr(${news.source}, 1, 200) || '...'`,
+		})
+		.from(news)
+		.where(eq(news.lang, lang))
+		.orderBy(desc(news.createdAt))
+		.offset(offset)
+		.limit(limit)
+		.all();
+}, "news-preview");
 
 export default function Home() {
 	const { t, lang } = useTranslation("home");
@@ -128,7 +127,7 @@ export default function Home() {
 								<ArticleCard
 									title={n.title}
 									description={n.source}
-									href={langLink(n.lang, `information/news/${n.id}`)}
+									href={langLink(lang(), `information/news/${n.id}`)}
 								/>
 							)}
 						</For>
