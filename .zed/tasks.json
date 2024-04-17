@@ -1,0 +1,10 @@
+[
+	{
+		"label": "Format whole project",
+		"command": "bunx @biomejs/biome check --apply-unsafe src app.config.ts package.json drizzle.config.ts"
+	},
+	{
+		"label": "Start Drizzle Studio",
+		"command": "bunx drizzle-kit studio"
+	}
+]

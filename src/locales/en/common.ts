@@ -43,8 +43,6 @@ export default {
 		surveyOfWorkers: "Survey of scientific and pedagogical workers 121",
 		telegram: "Link to our telegram channel",
 		facebook: "Link to our facebook",
-		copyrights:
-			"Copyright © 2022 Faculty of Applied Mathematics NTUU «Igor Sikorsky KPI»",
 	},
 	errors: {
 		403: {

@@ -29,6 +29,7 @@ export const ThemedIcon = (props: ThemedIconProps) => {
 			)}
 			<source srcset={darkSrc()} media="(prefers-color-scheme: dark)" />
 			<source srcset={lightSrc()} media="(prefers-color-scheme: light)" />
+			{/* biome-ignore lint/a11y/useAltText: these are just presentational images */}
 			<img alt="" role="presentation" {...props} src={lightSrc()} />
 		</picture>
 	);

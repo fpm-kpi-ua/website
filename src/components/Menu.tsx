@@ -8,15 +8,13 @@ export function Menu() {
 
 	return (
 		<>
+			{/* biome-ignore lint/a11y/useKeyWithClickEvents: handled by default by browser */}
 			<div
 				aria-label={t("menu.summary")}
 				id="menu"
 				class="menu__popup"
 				popover="auto"
-				onClick={(e) => {
-					// @ts-ignore
-					e.currentTarget.hidePopover();
-				}}
+				onClick={(e) => e.currentTarget.hidePopover()}
 			>
 				<div class="grid justify-center gap-4 p-sides-padding pt-1">
 					<Nav isPopup />
@@ -24,6 +22,7 @@ export function Menu() {
 				</div>
 			</div>
 			<button
+				type="button"
 				id="menu-button"
 				popovertarget="menu"
 				aria-label={t("aria.toggleMenu")}

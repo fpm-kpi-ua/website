@@ -163,8 +163,8 @@ export default function Sections() {
 							)}
 							<li>
 								<ArticleCard
-									title={article.title!}
-									description={article.description!}
+									title={article.title ?? ""}
+									description={article.description ?? ""}
 									href={langLink(
 										params.lang,
 										`${params.section}/${article.slug}`,
