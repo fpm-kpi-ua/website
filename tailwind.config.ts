@@ -1,3 +1,4 @@
+import containerQueries from "@tailwindcss/container-queries";
 import typography from "@tailwindcss/typography";
 import type { Config } from "tailwindcss";
 
@@ -17,6 +18,16 @@ export default {
 		fontFamily: {
 			heading: ["DaysOne", "sans-serif"],
 			pi: ["Pi", "sans-serif"],
+			mono: [
+				"ui-monospace",
+				"SFMono-Regular",
+				"Menlo",
+				"Monaco",
+				"Consolas",
+				"Liberation Mono",
+				"Courier New",
+				"monospace",
+			],
 		},
 		extend: {
 			boxShadow: {
@@ -36,8 +47,10 @@ export default {
 				"background-secondary":
 					"rgb(var(--secondary-background-color) / <alpha-value>)",
 				text: "rgb(var(--text-color) / <alpha-value>)",
+				error: "rgb(var(--error-color) / <alpha-value>)",
 			},
-			typography: (theme) => ({
+			// biome-ignore lint/suspicious/noExplicitAny: have no idea how to fix it
+			typography: (theme: any) => ({
 				DEFAULT: {
 					css: {
 						"--tw-prose-body": theme("colors.text"),
@@ -60,5 +73,5 @@ export default {
 			}),
 		},
 	},
-	plugins: [typography],
+	plugins: [typography, containerQueries],
 } satisfies Config;

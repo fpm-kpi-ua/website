@@ -24,6 +24,9 @@
 			"correctness": {
 				"noUnusedImports": "warn",
 				"useJsxKeyInIterable": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
 			}
 		}
 	}

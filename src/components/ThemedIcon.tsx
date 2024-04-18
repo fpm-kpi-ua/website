@@ -1,9 +1,9 @@
-import type { Accessor, JSX } from "solid-js";
+import type { JSX } from "solid-js";
 import { cx } from "~/shared/cx";
 
 type ThemedIconProps = JSX.ImgHTMLAttributes<HTMLImageElement> & {
 	mobileWidth?: number;
-	path: string | Accessor<string>;
+	path: string;
 };
 
 export const ThemedIcon = (props: ThemedIconProps) => {

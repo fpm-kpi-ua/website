@@ -2,6 +2,11 @@
 	"tab_size": 2,
 	"hard_tabs": true,
 	"formatter": "auto",
+	"git": {
+		"inline_blame": {
+			"enabled": false
+		}
+	},
 	"language_overrides": {
 		"JavaScript": {
 			"formatter": {

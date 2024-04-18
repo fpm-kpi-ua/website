@@ -40,7 +40,16 @@
     border: 0.1rem solid var(--gray-color);
     border-radius: calc(2 * theme(borderRadius.DEFAULT));
   }
+
   .btn--primary {
     @apply text-background bg-primary border-transparent hover:bg-opacity-80 active:bg-opacity-80 hover:border-transparent active:border-transparent;
+  }
+
+  .btn--danger {
+    color: rgb(var(--error-color));
+  }
+
+  .btn--danger:hover {
+    border-color: rgb(var(--error-color));
   }
 }

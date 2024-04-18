@@ -2,7 +2,7 @@
 import { MetaProvider } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
-import { ErrorBoundary, Suspense } from "solid-js";
+import { ErrorBoundary, Show, Suspense } from "solid-js";
 import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
 import "~/styles/index.css";
@@ -26,7 +26,9 @@ export default function App() {
 								{props.children}
 							</ErrorBoundary>
 						</main>
-						<Footer />
+						<Show when={!props.location.pathname.endsWith("/edit")}>
+							<Footer />
+						</Show>
 					</MetaProvider>
 				</Suspense>
 			)}

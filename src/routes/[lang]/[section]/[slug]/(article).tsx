@@ -14,8 +14,9 @@ import type { Lang, Section } from "~/shared/types";
 
 const getArticle = cache(async (lang: Lang, section: Section, slug: string) => {
 	"use server";
-	if (!existingSections.includes(section))
+	if (!existingSections.includes(section)) {
 		throw new Error("Such section does not exist");
+	}
 	return db
 		.select({
 			title: articles.title,
@@ -50,6 +51,7 @@ export default function Article() {
 		section: Section;
 		slug: string;
 	}>();
+
 	const article = createAsync(() =>
 		getArticle(params.lang, params.section, params.slug),
 	);

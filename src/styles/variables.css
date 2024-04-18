@@ -4,11 +4,11 @@
   --disabled-dark-color: #9b9b9b;
   --disabled-light-color: #efefef20;
   --gray-color: #b6b6b6;
-  --error-color: #ff4d4f;
   --overlay-color: #22222280;
   --vh: 100vh;
   --transition: all 0.3s cubic-bezier(0, 0, 0.2, 1), color 0s;
   --max-page-width: 50rem;
+  --error-color: 255, 77, 79;
 }
 
 @supports (height: 100dvh) {

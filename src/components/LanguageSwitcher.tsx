@@ -4,11 +4,9 @@ import { cx } from "~/shared/cx";
 import { langLink } from "~/shared/lang";
 import { useTranslation } from "~/shared/useTranslation";
 
-type LanguageSwitcherProps = {
+export function LanguageSwitcher(props: {
 	class?: string;
-};
-
-export function LanguageSwitcher(props: LanguageSwitcherProps) {
+}) {
 	const { lang } = useTranslation();
 	const location = useLocation();
 	const pathname = createMemo(() => location.pathname);
@@ -31,23 +29,6 @@ export function LanguageSwitcher(props: LanguageSwitcherProps) {
 			>
 				Укр
 			</a>
-			{/* <svg
-				width="0.1rem"
-				height="1.3rem"
-				viewBox="0 0 2 30"
-				fill="none"
-				class="text-text"
-			>
-				<line
-					x1="1"
-					y1="29"
-					x2="1"
-					y2="1"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-				/>
-			</svg> */}
 			<a
 				class={cx(
 					"ml-1 leading-4",
