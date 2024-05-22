@@ -3,6 +3,7 @@ import type dictType from "~/locales/uk/admin";
 export default {
 	users: "Users",
 	edit: "Edit",
+	history: "History",
 	save: "Save",
 	publish: "Publish",
 	cancel: "Cancel",
@@ -13,7 +14,7 @@ export default {
 	slug: "Slug",
 	description: "Description",
 	keywords: "Keywords",
-	articleLang: "Language of article's content",
+	articleLang: "Article's language",
 	draft: "Draft",
 	newsSaved: "An updated version of the news was successfully saved!",
 	deleteArticle: "Delete article",

@@ -5,7 +5,10 @@ import {
 	sqliteTable,
 	text,
 } from "drizzle-orm/sqlite-core";
-import type { Lang, Section } from "~/shared/types";
+import { createInsertSchema } from "drizzle-valibot";
+import { type Input, omit } from "valibot";
+import { existingSections, supportedLngs } from "~/shared/constants";
+import type { Lang } from "~/shared/types";
 
 export const users = sqliteTable("users", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
@@ -82,30 +85,36 @@ export const news = sqliteTable("news", {
 export const articles = sqliteTable(
 	"articles",
 	{
-		lang: text("lang").notNull().$type<Lang>(),
-		section: text("section").notNull().$type<Section>(),
+		lang: text("lang", { enum: supportedLngs }).notNull(),
+		section: text("section", { enum: existingSections }).notNull(),
 		slug: text("slug").notNull(),
 		title: text("title").notNull(),
 		description: text("description").notNull(),
 		keywords: text("keywords"),
-		isPublished: integer("is_published", { mode: "boolean" })
+		isActive: integer("is_active", { mode: "boolean" })
 			.default(false)
 			.notNull(),
-		version: integer("version").default(0).notNull(),
-		articleLang: text("article_lang").notNull().$type<Lang>(),
+		articleLang: text("article_lang", { enum: supportedLngs }).notNull(),
 		source: text("source").notNull(),
 		html: text("html").notNull(),
-		modifiedBy: text("modified_by").notNull(),
+		modifiedBy: integer("modified_by")
+			.notNull()
+			.references(() => users.id),
 		createdAt: integer("created_at")
 			.default(sql`(strftime('%s','now') * 1000)`)
 			.notNull(),
 	},
 	(table) => ({
 		pk: primaryKey({
-			columns: [table.lang, table.section, table.slug, table.version],
+			columns: [table.lang, table.section, table.slug, table.createdAt],
 		}),
 	}),
 );
+
+export const insertArticleSchema = omit(createInsertSchema(articles), [
+	"createdAt",
+]);
+export type InsertArticle = Input<typeof insertArticleSchema>;
 
 export const resetTokens = sqliteTable("reset_tokens", {
 	userId: text("user_id")

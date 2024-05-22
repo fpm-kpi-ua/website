@@ -12,14 +12,14 @@ CREATE TABLE `articles` (
 	`title` text NOT NULL,
 	`description` text NOT NULL,
 	`keywords` text,
-	`is_published` integer DEFAULT false NOT NULL,
-	`version` integer DEFAULT 0 NOT NULL,
+	`is_active` integer DEFAULT false NOT NULL,
 	`article_lang` text NOT NULL,
 	`source` text NOT NULL,
 	`html` text NOT NULL,
-	`modified_by` text NOT NULL,
+	`modified_by` integer NOT NULL,
 	`created_at` integer DEFAULT (strftime('%s','now') * 1000) NOT NULL,
-	PRIMARY KEY(`lang`, `section`, `slug`, `version`)
+	PRIMARY KEY(`created_at`, `lang`, `section`, `slug`),
+	FOREIGN KEY (`modified_by`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `content_managers` (
@@ -29,7 +29,7 @@ CREATE TABLE `content_managers` (
 );
 --> statement-breakpoint
 CREATE TABLE `news` (
-	`id` text PRIMARY KEY NOT NULL,
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`title` text NOT NULL,
 	`source` text NOT NULL,
 	`html` text NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE `teachers` (
 );
 --> statement-breakpoint
 CREATE TABLE `users` (
-	`id` text PRIMARY KEY NOT NULL,
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`email` text NOT NULL,
 	`password` text NOT NULL,
 	`salt` text NOT NULL,

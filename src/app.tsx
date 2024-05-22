@@ -17,7 +17,8 @@ export default function App() {
 						<main class="relative mt-header-height p-sides-padding">
 							<ErrorBoundary
 								fallback={(error) => (
-									<div class="text-center text-red-500">
+									<div class="text-center text-error">
+										{console.error(error) as unknown as string}
 										<h1>Error</h1>
 										<pre>{error.message}</pre>
 									</div>

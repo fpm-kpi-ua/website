@@ -8,7 +8,7 @@
   --vh: 100vh;
   --transition: all 0.3s cubic-bezier(0, 0, 0.2, 1), color 0s;
   --max-page-width: 50rem;
-  --error-color: 255, 77, 79;
+  --error-color: 255 77 79;
 }
 
 @supports (height: 100dvh) {

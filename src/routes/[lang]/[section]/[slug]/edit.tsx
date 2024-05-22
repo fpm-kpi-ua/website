@@ -1,43 +1,114 @@
-import { action, cache, createAsync, useParams } from "@solidjs/router";
-import { and, desc, eq } from "drizzle-orm";
-import { createEffect, createSignal } from "solid-js";
-import { Show } from "solid-js";
-import { db } from "~/drizzle/db";
+import { Title } from "@solidjs/meta";
+import {
+	A,
+	type RouteSectionProps,
+	action,
+	cache,
+	createAsync,
+	redirect,
+	useLocation,
+	useParams,
+	useSubmission,
+} from "@solidjs/router";
+import { createInsertSchema } from "drizzle-valibot";
+import { For, Show, createEffect, createSignal } from "solid-js";
+import { getRequestEvent } from "solid-js/web";
+import { ValiError, coerce, omit, parse, regex, string } from "valibot";
+import { Input } from "~/components/Input";
+import { Select } from "~/components/Select";
+import { Textarea } from "~/components/Textarea";
 import { articles } from "~/drizzle/schema";
+import {
+	getArticleHistory,
+	getEditArticle,
+	publishArticle,
+	saveArticle,
+} from "~/shared/article";
 import { existingSections } from "~/shared/constants";
+import { cx } from "~/shared/cx";
 import { mdxToHtml } from "~/shared/mdxToHtml";
 import type { Lang, Section } from "~/shared/types";
 import { useTranslation } from "~/shared/useTranslation";
-import "./edit.css";
+
+const schema = omit(
+	createInsertSchema(articles, {
+		slug: string([regex(/^[a-z0-9-]+$/)]),
+		isActive: (schema) => coerce(schema.isActive, (i) => i === "true"),
+	}),
+	["createdAt"],
+);
 
 const save = action(async (data: FormData) => {
 	"use server";
-	console.log(Object.fromEntries(data));
-	return "ok";
-}, "save");
-
-const getArticle = cache(async (lang: Lang, section: Section, slug: string) => {
-	"use server";
-	if (!existingSections.includes(section)) {
-		throw new Error("Such section does not exist");
+	const referrer = getRequestEvent()?.request.headers.get("referer");
+	if (!referrer) return;
+	const [, lang, section, slug] = new URL(referrer).pathname.split("/");
+	const input = Object.assign(
+		{ lang, section, slug, modifiedBy: 0 },
+		Object.fromEntries(data),
+	);
+	try {
+		const article = parse(schema, input);
+		const savedArticle = saveArticle(article);
+		if (article.isActive) {
+			publishArticle(
+				savedArticle.lang,
+				savedArticle.section,
+				savedArticle.slug,
+				savedArticle.createdAt,
+			);
+		}
+		if (savedArticle.slug !== slug) {
+			return redirect(
+				`/${savedArticle.lang}/${savedArticle.section}/${savedArticle.slug}/edit`,
+			);
+		}
+		return {};
+	} catch (e) {
+		if (e instanceof ValiError) {
+			const errors = e.issues.reduce(
+				(acc, issue) => {
+					acc[issue.path?.at(0)?.key as string] = issue.message;
+					return acc;
+				},
+				{} as Record<string, string>,
+			);
+			return { errors };
+		}
+		return { errors: { general: "An error occurred" } };
 	}
-	return db
-		.select()
-		.from(articles)
-		.where(
-			and(
-				eq(articles.lang, lang),
-				eq(articles.section, section),
-				eq(articles.slug, slug),
-				eq(articles.isPublished, true),
-			),
-		)
-		.orderBy(desc(articles.version))
-		.limit(1)
-		.all()[0];
-}, "article");
+}, "articleEdit");
 
-export default function EditArticle() {
+const getArticle = cache(
+	async (lang: Lang, section: Section, slug: string, version?: number) => {
+		"use server";
+		if (!existingSections.includes(section)) {
+			throw new Error("Such section does not exist");
+		}
+		return getEditArticle(lang, section, slug, version);
+	},
+	"articleEdit",
+);
+
+const getArticleVersions = cache(
+	async (lang: Lang, section: Section, slug: string) => {
+		"use server";
+		if (!existingSections.includes(section)) {
+			throw new Error("Such section does not exist");
+		}
+		return getArticleHistory(lang, section, slug);
+	},
+	"articleVersions",
+);
+
+function getSearchParams(name: string, value: string | number) {
+	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	searchParams.set(name, value.toString());
+	return `?${searchParams.toString()}`;
+}
+
+export default function EditArticle({ location }: RouteSectionProps) {
 	const { t } = useTranslation("admin");
 	const params = useParams<{
 		lang: Lang;
@@ -45,99 +116,180 @@ export default function EditArticle() {
 		slug: string;
 	}>();
 	const article = createAsync(() =>
-		getArticle(params.lang, params.section, params.slug),
+		getArticle(
+			params.lang,
+			params.section,
+			params.slug,
+			+location.query.createdAt,
+		),
 	);
 	const [html, setHtml] = createSignal("");
 	const [mdx, setMdx] = createSignal(article()?.source ?? "");
+	const submission = useSubmission(save);
+	const [title, setTitle] = createSignal(article()?.title ?? "");
+
+	const oppositeMode = () =>
+		location.query.mode === "history" ? "edit" : "history";
 
 	createEffect(() => {
 		typeof article()?.source === "string" && setMdx(article()?.source!);
+		typeof article()?.title === "string" && setTitle(article()?.title!);
 	});
 
 	createEffect(async () => {
-		const htm = await mdxToHtml(mdx());
-		setHtml(htm ?? "");
+		const { innerHTML } = await mdxToHtml(mdx());
+		if (!innerHTML) return;
+		setHtml(innerHTML);
 	});
 
 	return (
-		<div class="flex w-full flex-col gap-4 lg:flex-row">
-			<div class="@container w-full">
-				<form
-					method="post"
-					action={save}
-					class="grid size-full h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] gap-y-4 [grid-template-areas:'meta''editor''buttons'] [grid-template-columns:1fr_max-content] [grid-template-rows:max-content_1fr_max-content] @lg:[grid-template-areas:'meta_buttons''editor_editor'] @lg:[grid-template-rows:max-content_1fr]"
-				>
-					<details class="[grid-area:meta]">
-						<summary class="mb-2 w-max rounded">{article()?.title}</summary>
-						<label class="mt-2 grid">
-							<span>{t("slug")}</span>
-							<input
+		<>
+			<Title>{article()?.title}</Title>
+			<div class="flex w-full flex-col gap-2 lg:flex-row">
+				<div class="@container w-full">
+					<form
+						method="post"
+						action={save}
+						class="grid size-full h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] gap-y-4 [grid-template-areas:'meta_mode''editor_editor''buttons_buttons'] [grid-template-columns:1fr_max-content] [grid-template-rows:max-content_1fr_max-content] @xl:gap-x-2 @xl:[grid-template-areas:'meta_buttons''editor_editor'] @xl:[grid-template-rows:max-content_max-content_1fr]"
+					>
+						<details class="[grid-area:meta]">
+							<summary class="mb-2 w-max select-none rounded">
+								{title() || t("title")}
+							</summary>
+							<Input
+								label={t("slug")}
 								name="slug"
+								disabled={!!article()?.slug}
 								value={article()?.slug}
-								class="rounded border border-border bg-background px-2 py-1 text-text hover:border-primary"
+								error={() => submission.result?.errors?.slug}
 							/>
-						</label>
-						<label class="mt-2 grid">
-							<span>{t("title")}</span>
-							<input
+							<Input
+								label={t("title")}
 								name="title"
 								value={article()?.title}
-								class="rounded border border-border bg-background px-2 py-1 text-text hover:border-primary"
+								onInput={(e) => setTitle(e.currentTarget.value)}
+								error={() => submission.result?.errors?.title}
 							/>
-						</label>
-						<label class="mt-2 grid">
-							<span>{t("description")}</span>
-							<textarea
+							<Textarea
+								label={t("description")}
 								name="description"
-								class="h-28 rounded border border-border bg-background px-2 py-1 text-text @lg:h-20 hover:border-primary"
-							>
-								{article()?.description}
-							</textarea>
-						</label>
-						<label class="mt-2 grid">
-							<span>{t("keywords")}</span>
-							<input
+								value={article()?.description}
+								error={() => submission.result?.errors?.description}
+								class="h-28 @lg:h-20"
+							/>
+							<Input
+								label={t("keywords")}
 								name="keywords"
 								value={article()?.keywords ?? ""}
-								class="rounded border border-border bg-background px-2 py-1 text-text hover:border-primary"
+								error={() => submission.result?.errors?.keywords}
 							/>
-						</label>
-						<label class="mt-2 grid">
-							<span>{t("articleLang")}</span>
-							<select
-								name="lang"
-								value={article()?.articleLang}
-								class="w-min rounded border border-border bg-background px-2 py-1 text-text hover:border-primary"
+							<Select
+								label={t("articleLang")}
+								name="articleLang"
+								error={() => submission.result?.errors?.articleLang}
+								class="w-min"
 							>
-								<option selected={article()?.articleLang === "en"}>en</option>
-								<option selected={article()?.articleLang === "uk"}>uk</option>
-							</select>
-						</label>
-					</details>
-					<div class="flex w-full gap-2 [grid-area:buttons] @lg:absolute @lg:right-0 @lg:w-min">
-						<button type="button" name="isPublished" value="true">
-							{t("publish")}
-						</button>
-						<button type="submit" class="btn--primary w-full">
-							{t("save")}
-						</button>
-					</div>
-					<input name="html" value={html()} hidden />
-					<textarea
-						name="source"
-						class="resize-none overflow-x-scroll whitespace-pre rounded border border-border bg-background px-2 py-1 font-mono text-text [grid-area:editor] hover:border-primary"
-						onInput={(e) => setMdx(e.currentTarget.value)}
-					>
-						{mdx()}
-					</textarea>
-				</form>
-			</div>
-			<Show when={true}>
+								<option
+									selected={
+										article()?.articleLang === "en" ||
+										(!article()?.articleLang && params.lang === "en")
+									}
+								>
+									en
+								</option>
+								<option
+									selected={
+										article()?.articleLang === "uk" ||
+										(!article()?.articleLang && params.lang === "uk")
+									}
+								>
+									uk
+								</option>
+							</Select>
+						</details>
+						<A
+							activeClass=""
+							class="absolute right-0 my-1 font-heading [grid-area:mode] @xl:hidden"
+							href={getSearchParams("mode", oppositeMode())}
+						>
+							{t(oppositeMode())}
+						</A>
+						<div class="flex w-full gap-2 [grid-area:buttons] @xl:absolute @xl:right-0 @xl:w-min">
+							<A
+								activeClass=""
+								class="my-1 hidden font-heading @xl:block"
+								href={getSearchParams("mode", oppositeMode())}
+							>
+								{t(oppositeMode())}
+							</A>
+							<button type="submit" name="isActive" value="true">
+								{t("publish")}
+							</button>
+							<button type="submit" class="btn--primary w-full">
+								{t("save")}
+							</button>
+						</div>
+						<input name="html" value={html()} hidden />
+						<Textarea
+							name="source"
+							value={mdx()}
+							class="resize-none overflow-x-scroll whitespace-pre font-mono"
+							labelClass={cx(
+								"[grid-area:editor]",
+								location.query.mode === "history" && "hidden",
+							)}
+							onInput={(e) => setMdx(e.currentTarget.value)}
+							error={() => submission.result?.errors?.source}
+						/>
+						<Show when={location.query.mode === "history"}>
+							<VersionSelector />
+						</Show>
+					</form>
+				</div>
 				<article
-					class="prose w-full overflow-y-auto text-wrap break-words lg:h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] lg:w-[50%]"
+					class="prose w-full overflow-y-auto text-wrap break-words p-2 lg:h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] lg:w-[50%]"
 					innerHTML={html()}
 				/>
-			</Show>
-		</div>
+			</div>
+		</>
+	);
+}
+
+function VersionSelector() {
+	const params = useParams<{
+		lang: Lang;
+		section: Section;
+		slug: string;
+	}>();
+	const versions = createAsync(() =>
+		getArticleVersions(params.lang, params.section, params.slug),
+	);
+	return (
+		<ul class="list-none [grid-area:editor]">
+			<For each={versions()}>
+				{(version) => (
+					<li>
+						<a
+							href={`/${params.lang}/${params.section}/${
+								params.slug
+							}/edit${getSearchParams("createdAt", version.createdAt)}`}
+							class="flex justify-between gap-1"
+						>
+							<span>{version.title} </span>
+							<span>{version.modifiedBy}</span>
+							<span>
+								{new Date(version.createdAt).toLocaleString(undefined, {
+									year: "numeric",
+									month: "short",
+									day: "numeric",
+									hour: "2-digit",
+									minute: "2-digit",
+								})}
+							</span>
+						</a>
+					</li>
+				)}
+			</For>
+		</ul>
 	);
 }

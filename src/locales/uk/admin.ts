@@ -1,6 +1,7 @@
 export default {
 	users: "Користувачі",
 	edit: "Редагувати",
+	history: "Історія",
 	save: "Зберегти",
 	publish: "Опублікувати",
 	cancel: "Скасувати",
@@ -11,7 +12,7 @@ export default {
 	slug: "Посилання",
 	description: "Опис",
 	keywords: "Ключові слова",
-	articleLang: "Мова контенту статті",
+	articleLang: "Мова статті",
 	draft: "Чорновик",
 	newsSaved: "Оновлену версію новини успішно збережено!",
 	deleteArticle: "Видалити статтю",

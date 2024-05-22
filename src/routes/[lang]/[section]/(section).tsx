@@ -5,60 +5,22 @@ import {
 	createAsync,
 	useParams,
 } from "@solidjs/router";
-import { and, eq, max } from "drizzle-orm";
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import { ArticleCard } from "~/components/ArticleCard";
 import { ThemedIcon } from "~/components/ThemedIcon";
-import { db } from "~/drizzle/db";
-import { articles } from "~/drizzle/schema";
+import { getArticlePreviews } from "~/shared/article";
 import { existingSections } from "~/shared/constants";
 import { langLink, parseLang } from "~/shared/lang";
 import type { Lang, Section } from "~/shared/types";
 import { useTranslation } from "~/shared/useTranslation";
-import "./index.css";
+import "./(section).css";
 // TODO: add error handling, add edit and create new article links
 
 const getSectionPreview = cache(async (lang: Lang, section: Section) => {
 	"use server";
 	if (!existingSections.includes(section))
 		throw new Error("Such section does not exist");
-	const mv = db
-		.select({
-			lang: articles.lang,
-			section: articles.section,
-			slug: articles.slug,
-			maxVersion: max(articles.version).as("maxVersion"),
-		})
-		.from(articles)
-		.where(and(eq(articles.lang, lang), eq(articles.section, section)))
-		.groupBy(articles.lang, articles.section, articles.slug)
-		.as("maxVersions");
-
-	return db
-		.select({
-			slug: articles.slug,
-			title: articles.title,
-			description: articles.description,
-		})
-		.from(articles)
-		.rightJoin(
-			mv,
-			and(
-				eq(articles.slug, mv.slug),
-				eq(articles.version, mv.maxVersion),
-				eq(articles.lang, mv.lang),
-				eq(articles.section, mv.section),
-			),
-		)
-		.where(
-			and(
-				eq(articles.lang, lang),
-				eq(articles.section, section),
-				eq(articles.isPublished, true),
-			),
-		)
-		.orderBy(articles.title)
-		.all();
+	return getArticlePreviews(lang, section);
 }, "sections");
 
 const images: Record<
@@ -135,7 +97,7 @@ export default function Sections() {
 
 	const { t } = useTranslation();
 	return (
-		<div class="mx-auto max-w-max-page-width">
+		<>
 			<Title>{t(`header.${params.section}`)}</Title>
 			<Meta
 				name="description"
@@ -143,43 +105,45 @@ export default function Sections() {
 					section: t(`header.${params.section}`),
 				})}
 			/>
-			<h2 class="sr-only">Sections</h2>
-			<ul class="grid list-none grid-cols-1 gap-4 md:grid-cols-2">
-				{images[params.section].first && (
-					<li class={images[params.section].first.class}>
-						<ThemedIcon
-							path={images[params.section].first.path}
-							class="h-fit"
-						/>
-					</li>
-				)}
-				<For each={articlesPreview()}>
-					{(article, i) => (
-						<>
-							{images[params.section][i()] && (
-								<li class={images[params.section][i()].class}>
-									<ThemedIcon path={images[params.section][i()].path} />
+			<div class="mx-auto max-w-max-page-width">
+				<h2 class="sr-only">Sections</h2>
+				<ul class="grid list-none grid-cols-1 gap-4 md:grid-cols-2">
+					<Show when={images[params.section].first?.path}>
+						<li class={images[params.section].first.class}>
+							<ThemedIcon
+								path={images[params.section].first.path}
+								class="h-fit"
+							/>
+						</li>
+					</Show>
+					<For each={articlesPreview()}>
+						{(article, i) => (
+							<>
+								<Show when={images[params.section][i()]?.path}>
+									<li class={images[params.section][i()].class}>
+										<ThemedIcon path={images[params.section][i()].path} />
+									</li>
+								</Show>
+								<li>
+									<ArticleCard
+										title={article.title ?? ""}
+										description={article.description ?? ""}
+										href={langLink(
+											params.lang,
+											`${params.section}/${article.slug}`,
+										)}
+									/>
 								</li>
-							)}
-							<li>
-								<ArticleCard
-									title={article.title ?? ""}
-									description={article.description ?? ""}
-									href={langLink(
-										params.lang,
-										`${params.section}/${article.slug}`,
-									)}
-								/>
-							</li>
-						</>
-					)}
-				</For>
-				{images[params.section].last && (
-					<li class={images[params.section].last.class}>
-						<ThemedIcon path={images[params.section].last.path} />
-					</li>
-				)}
-			</ul>
-		</div>
+							</>
+						)}
+					</For>
+					<Show when={images[params.section].last?.path}>
+						<li class={images[params.section].last.class}>
+							<ThemedIcon path={images[params.section].last.path} />
+						</li>
+					</Show>
+				</ul>
+			</div>
+		</>
 	);
 }

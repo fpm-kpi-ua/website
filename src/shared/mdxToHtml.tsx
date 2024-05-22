@@ -6,11 +6,10 @@ import { isServer, render } from "solid-js/web";
  *
  * Renders mdx to solid component and mounts it to the wrapper
  * @param mdx - mdx string to render
- * @param wrapper - HTMLElement to mount the rendered component to
  * @returns the innerHTML of the wrapper
  */
 export async function mdxToHtml(mdx: string) {
-	if (!wrapper) return;
+	if (!wrapper) return {} as Readonly<Record<string, never>>;
 	const { Fragment, jsx } = await import("solid-js/h/jsx-runtime");
 	const { default: remarkGfm } = await import("remark-gfm");
 	const customPlugins = await getCustomPlugins();
@@ -30,8 +29,9 @@ export async function mdxToHtml(mdx: string) {
 	});
 	wrapper.innerHTML = "";
 	render(() => <Component components={{}} />, wrapper);
-	return wrapper.innerHTML;
+	return wrapper as Readonly<HTMLDivElement>;
 }
+
 const wrapper = isServer ? null : document.createElement("div");
 
 async function getCustomPlugins() {
