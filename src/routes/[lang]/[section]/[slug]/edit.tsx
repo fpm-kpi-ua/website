@@ -13,7 +13,7 @@ import {
 import { createInsertSchema } from "drizzle-valibot";
 import { For, Show, createEffect, createSignal } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
-import { ValiError, coerce, omit, parse, regex, string } from "valibot";
+import * as v from "valibot";
 import { Input } from "~/components/Input";
 import { Select } from "~/components/Select";
 import { Textarea } from "~/components/Textarea";
@@ -30,10 +30,10 @@ import { mdxToHtml } from "~/shared/mdxToHtml";
 import type { Lang, Section } from "~/shared/types";
 import { useTranslation } from "~/shared/useTranslation";
 
-const schema = omit(
+const schema = v.omit(
 	createInsertSchema(articles, {
-		slug: string([regex(/^[a-z0-9-]+$/)]),
-		isActive: (schema) => coerce(schema.isActive, (i) => i === "true"),
+		slug: v.string([v.regex(/^[a-z0-9-]+$/)]),
+		isActive: (schema) => v.coerce(schema.isActive, (i) => i === "true"),
 	}),
 	["createdAt"],
 );
@@ -42,30 +42,49 @@ const save = action(async (data: FormData) => {
 	"use server";
 	const referrer = getRequestEvent()?.request.headers.get("referer");
 	if (!referrer) return;
-	const [, lang, section, slug] = new URL(referrer).pathname.split("/");
+	const url = new URL(referrer);
+	const [, lang, section, slug] = url.pathname.split("/");
+	let createdAt = Number(url.searchParams.get("createdAt"));
 	const input = Object.assign(
 		{ lang, section, slug, modifiedBy: 0 },
 		Object.fromEntries(data),
 	);
 	try {
-		const article = parse(schema, input);
-		const savedArticle = saveArticle(article);
+		const article = v.parse(schema, input);
+		if (createdAt) {
+			const oldArticle = getEditArticle(
+				lang as Lang,
+				section as Section,
+				slug,
+				+createdAt,
+			);
+			// save article only if it has changed
+			if (
+				oldArticle?.slug !== article.slug ||
+				oldArticle?.title !== article.title ||
+				oldArticle?.description !== article.description ||
+				oldArticle?.keywords !== article.keywords ||
+				oldArticle?.html !== article.html ||
+				oldArticle?.articleLang !== article.articleLang ||
+				oldArticle?.source !== article.source
+			) {
+				createdAt = saveArticle(article).createdAt;
+			}
+		} else {
+			createdAt = saveArticle(article).createdAt;
+		}
 		if (article.isActive) {
-			publishArticle(
-				savedArticle.lang,
-				savedArticle.section,
-				savedArticle.slug,
-				savedArticle.createdAt,
-			);
+			publishArticle(article.lang, article.section, article.slug, createdAt);
 		}
-		if (savedArticle.slug !== slug) {
+		if (article.slug !== slug) {
 			return redirect(
-				`/${savedArticle.lang}/${savedArticle.section}/${savedArticle.slug}/edit`,
+				`/${article.lang}/${article.section}/${article.slug}/edit`,
 			);
 		}
-		return {};
+		url.searchParams.set("createdAt", createdAt.toString());
+		return redirect(url.toString());
 	} catch (e) {
-		if (e instanceof ValiError) {
+		if (e instanceof v.ValiError) {
 			const errors = e.issues.reduce(
 				(acc, issue) => {
 					acc[issue.path?.at(0)?.key as string] = issue.message;

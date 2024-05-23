@@ -4,6 +4,6 @@ import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import * as schema from "~/drizzle/schema";
 
 const sqlite = new Database("./src/drizzle/sqlite.db");
-export const db = drizzle(sqlite, { schema, logger: true });
+export const db = drizzle(sqlite, { schema });
 
 migrate(db, { migrationsFolder: "./src/drizzle/migrations" });

@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq, max, sql } from "drizzle-orm";
+import { and, desc, eq, max, sql } from "drizzle-orm";
 import { db } from "~/drizzle/db";
 import { type InsertArticle, articles } from "~/drizzle/schema";
 import type { Lang, Section } from "./types";
@@ -120,7 +120,7 @@ export function getArticleHistory(lang: Lang, section: Section, slug: string) {
 				eq(articles.slug, slug),
 			),
 		)
-		.orderBy(articles.createdAt)
+		.orderBy(desc(articles.createdAt))
 		.all();
 }
 
