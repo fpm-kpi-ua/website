@@ -297,7 +297,7 @@ function VersionSelector() {
 							<span>{version.title} </span>
 							<span>{version.modifiedBy}</span>
 							<span>
-								{new Date(version.createdAt).toLocaleString(undefined, {
+								{new Date(version.createdAt).toLocaleString(params.lang, {
 									year: "numeric",
 									month: "short",
 									day: "numeric",
