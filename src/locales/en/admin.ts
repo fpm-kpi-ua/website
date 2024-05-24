@@ -6,6 +6,7 @@ export default {
 	history: "History",
 	save: "Save",
 	publish: "Publish",
+	deactivate: "Deactivate",
 	cancel: "Cancel",
 	delete: "Delete",
 	preview: "Preview",

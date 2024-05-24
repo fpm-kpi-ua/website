@@ -6,6 +6,7 @@ import {
 	cache,
 	createAsync,
 	redirect,
+	useAction,
 	useLocation,
 	useParams,
 	useSubmission,
@@ -23,6 +24,7 @@ import {
 	getEditArticle,
 	publishArticle,
 	saveArticle,
+	unpublishArticle,
 } from "~/shared/article";
 import { existingSections } from "~/shared/constants";
 import { cx } from "~/shared/cx";
@@ -37,6 +39,12 @@ const schema = v.omit(
 	}),
 	["createdAt"],
 );
+
+const unpublish = action(async (lang: Lang, section: Section, slug: string) => {
+	"use server";
+	unpublishArticle(lang, section, slug);
+	return {};
+}, "article-versions");
 
 const save = action(async (data: FormData) => {
 	"use server";
@@ -96,7 +104,7 @@ const save = action(async (data: FormData) => {
 		}
 		return { errors: { general: "An error occurred" } };
 	}
-}, "articleEdit");
+}, "article-edit");
 
 const getArticle = cache(
 	async (lang: Lang, section: Section, slug: string, version?: number) => {
@@ -106,7 +114,7 @@ const getArticle = cache(
 		}
 		return getEditArticle(lang, section, slug, version);
 	},
-	"articleEdit",
+	"article-edit",
 );
 
 const getArticleVersions = cache(
@@ -117,7 +125,7 @@ const getArticleVersions = cache(
 		}
 		return getArticleHistory(lang, section, slug);
 	},
-	"articleVersions",
+	"article-versions",
 );
 
 function getSearchParams(name: string, value: string | number) {
@@ -169,7 +177,7 @@ export default function EditArticle({ location }: RouteSectionProps) {
 					<form
 						method="post"
 						action={save}
-						class="grid size-full h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] gap-y-4 [grid-template-areas:'meta_mode''editor_editor''buttons_buttons'] [grid-template-columns:1fr_max-content] [grid-template-rows:max-content_1fr_max-content] @xl:gap-x-2 @xl:[grid-template-areas:'meta_buttons''editor_editor'] @xl:[grid-template-rows:max-content_max-content_1fr]"
+						class="grid size-full h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] gap-y-4 [grid-template-areas:'meta_mode''editor_editor''buttons_buttons'] [grid-template-columns:1fr_max-content] [grid-template-rows:max-content_1fr_max-content] @xl:gap-x-2 @xl:[grid-template-areas:'meta_buttons''editor_editor'] @xl:[grid-template-rows:max-content_1fr]"
 					>
 						<details class="[grid-area:meta]">
 							<summary class="mb-2 w-max select-none rounded">
@@ -283,18 +291,20 @@ function VersionSelector() {
 	const versions = createAsync(() =>
 		getArticleVersions(params.lang, params.section, params.slug),
 	);
+	const { t } = useTranslation("admin");
+	const unpublishArticle = useAction(unpublish);
 	return (
 		<ul class="list-none [grid-area:editor]">
 			<For each={versions()}>
 				{(version) => (
-					<li>
+					<li class="flex min-h-8 items-center justify-between gap-1">
 						<a
 							href={`/${params.lang}/${params.section}/${
 								params.slug
 							}/edit${getSearchParams("createdAt", version.createdAt)}`}
-							class="flex justify-between gap-1"
+							class="flex items-center justify-between gap-1"
 						>
-							<span>{version.title} </span>
+							<span>{version.title}</span>
 							<span>{version.modifiedBy}</span>
 							<span>
 								{new Date(version.createdAt).toLocaleString(params.lang, {
@@ -306,6 +316,17 @@ function VersionSelector() {
 								})}
 							</span>
 						</a>
+						<Show when={version.isActive}>
+							<button
+								type="button"
+								class="btn--danger"
+								onClick={() =>
+									unpublishArticle(params.lang, params.section, params.slug)
+								}
+							>
+								{t("deactivate")}
+							</button>
+						</Show>
 					</li>
 				)}
 			</For>

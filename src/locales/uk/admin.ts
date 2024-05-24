@@ -4,6 +4,7 @@ export default {
 	history: "Історія",
 	save: "Зберегти",
 	publish: "Опублікувати",
+	deactivate: "Деактивувати",
 	cancel: "Скасувати",
 	delete: "Видалити",
 	preview: "Переглянути",
