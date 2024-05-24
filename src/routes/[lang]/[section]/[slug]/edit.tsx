@@ -28,12 +28,14 @@ import {
 } from "~/shared/article";
 import { existingSections } from "~/shared/constants";
 import { cx } from "~/shared/cx";
+import { formatValidationErrors } from "~/shared/formatValidationErrors";
 import { mdxToHtml } from "~/shared/mdxToHtml";
 import type { Lang, Section } from "~/shared/types";
 import { useTranslation } from "~/shared/useTranslation";
 
 const schema = v.omit(
 	createInsertSchema(articles, {
+		title: v.string([v.minLength(1), v.maxLength(255)]),
 		slug: v.string([v.regex(/^[a-z0-9-]+$/)]),
 		isActive: (schema) => v.coerce(schema.isActive, (i) => i === "true"),
 	}),
@@ -57,53 +59,42 @@ const save = action(async (data: FormData) => {
 		{ lang, section, slug, modifiedBy: 0 },
 		Object.fromEntries(data),
 	);
-	try {
-		const article = v.parse(schema, input);
-		if (createdAt) {
-			const oldArticle = getEditArticle(
-				lang as Lang,
-				section as Section,
-				slug,
-				+createdAt,
-			);
-			// save article only if it has changed
-			if (
-				oldArticle?.slug !== article.slug ||
-				oldArticle?.title !== article.title ||
-				oldArticle?.description !== article.description ||
-				oldArticle?.keywords !== article.keywords ||
-				oldArticle?.html !== article.html ||
-				oldArticle?.articleLang !== article.articleLang ||
-				oldArticle?.source !== article.source
-			) {
-				createdAt = saveArticle(article).createdAt;
-			}
-		} else {
+	const res = v.safeParse(schema, input, { lang });
+	if (!res.success) {
+		return formatValidationErrors(res.issues);
+	}
+	const article = res.output;
+
+	if (createdAt) {
+		const oldArticle = getEditArticle(
+			lang as Lang,
+			section as Section,
+			slug,
+			+createdAt,
+		);
+		// save article only if it has changed
+		if (
+			oldArticle?.slug !== article.slug ||
+			oldArticle?.title !== article.title ||
+			oldArticle?.description !== article.description ||
+			oldArticle?.keywords !== article.keywords ||
+			oldArticle?.html !== article.html ||
+			oldArticle?.articleLang !== article.articleLang ||
+			oldArticle?.source !== article.source
+		) {
 			createdAt = saveArticle(article).createdAt;
 		}
-		if (article.isActive) {
-			publishArticle(article.lang, article.section, article.slug, createdAt);
-		}
-		if (article.slug !== slug) {
-			return redirect(
-				`/${article.lang}/${article.section}/${article.slug}/edit`,
-			);
-		}
-		url.searchParams.set("createdAt", createdAt.toString());
-		return redirect(url.toString());
-	} catch (e) {
-		if (e instanceof v.ValiError) {
-			const errors = e.issues.reduce(
-				(acc, issue) => {
-					acc[issue.path?.at(0)?.key as string] = issue.message;
-					return acc;
-				},
-				{} as Record<string, string>,
-			);
-			return { errors };
-		}
-		return { errors: { general: "An error occurred" } };
+	} else {
+		createdAt = saveArticle(article).createdAt;
 	}
+	if (article.isActive) {
+		publishArticle(article.lang, article.section, article.slug, createdAt);
+	}
+	if (article.slug !== slug) {
+		return redirect(`/${article.lang}/${article.section}/${article.slug}/edit`);
+	}
+	url.searchParams.set("createdAt", createdAt.toString());
+	return redirect(url.toString());
 }, "article-edit");
 
 const getArticle = cache(

@@ -15,6 +15,7 @@
 		"@solidjs/meta": "^0.29.4",
 		"@solidjs/router": "^0.13.3",
 		"@solidjs/start": "^1.0.0",
+		"@valibot/i18n": "^0.13.0",
 		"better-sqlite3": "^9.6.0",
 		"cyrillic-to-translit-js": "^3.2.1",
 		"drizzle-orm": "^0.30.10",
