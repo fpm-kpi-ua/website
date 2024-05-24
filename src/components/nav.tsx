@@ -2,7 +2,7 @@ import { A } from "@solidjs/router";
 import { existingSections } from "~/shared/constants";
 import { cx } from "~/shared/cx";
 import { langLink } from "~/shared/lang";
-import { useTranslation } from "~/shared/useTranslation";
+import { useTranslation } from "~/shared/use-translation";
 
 export function Nav(props: { isPopup: boolean }) {
 	const { t, lang } = useTranslation();

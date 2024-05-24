@@ -2,7 +2,7 @@ import { useLocation } from "@solidjs/router";
 import { createMemo } from "solid-js";
 import { cx } from "~/shared/cx";
 import { langLink } from "~/shared/lang";
-import { useTranslation } from "~/shared/useTranslation";
+import { useTranslation } from "~/shared/use-translation";
 
 export function LanguageSwitcher(props: {
 	class?: string;

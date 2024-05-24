@@ -1,4 +1,4 @@
-import { useTranslation } from "~/shared/useTranslation";
+import { useTranslation } from "~/shared/use-translation";
 
 export default function NotFound() {
 	const { t } = useTranslation();

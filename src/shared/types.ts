@@ -8,9 +8,3 @@ export interface ArticleCard {
 	link: string;
 	draft: boolean;
 }
-
-export interface Polyfill {
-	/** min version of browser in which feature is supported, and polyfill shouldn't be loaded */
-	browsers: Record<string, number>;
-	assets: string[];
-}

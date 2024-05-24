@@ -1,5 +1,5 @@
 import type { JSX } from "solid-js";
-import "./ArticleCard.css";
+import "~/components/article-card.css";
 
 export function ArticleCard(props: {
 	title: string;

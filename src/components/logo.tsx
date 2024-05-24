@@ -1,6 +1,6 @@
 import { cx } from "~/shared/cx";
 import { langLink } from "~/shared/lang";
-import { useTranslation } from "~/shared/useTranslation";
+import { useTranslation } from "~/shared/use-translation";
 
 export function Logo(props: { class?: string }) {
 	const { t, lang } = useTranslation("common");

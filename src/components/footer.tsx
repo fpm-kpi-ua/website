@@ -1,9 +1,9 @@
-import { FacebookIcon } from "~/components/Icons/FacebookIcon";
-import { TelegramIcon } from "~/components/Icons/TelegramIcon";
-import { Logo } from "~/components/Logo";
+import { FacebookIcon } from "~/components/icons/facebook-icon";
+import { TelegramIcon } from "~/components/icons/telegram-icon";
+import { Logo } from "~/components/logo";
 import { langLink } from "~/shared/lang";
-import { useTranslation } from "~/shared/useTranslation";
-import "./Footer.css";
+import { useTranslation } from "~/shared/use-translation";
+import "./footer.css";
 
 export const Footer = () => {
 	const { t, lang } = useTranslation();

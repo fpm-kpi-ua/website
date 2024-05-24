@@ -1,7 +1,7 @@
-import { useTranslation } from "~/shared/useTranslation";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import "./Menu.css";
-import { Nav } from "./Nav";
+import { LanguageSwitcher } from "~/components/language-switcher";
+import { useTranslation } from "~/shared/use-translation";
+import "~/components/menu.css";
+import { Nav } from "~/components/nav";
 
 export function Menu() {
 	const { t } = useTranslation();

@@ -11,7 +11,7 @@ import { db } from "~/drizzle/db";
 import { news } from "~/drizzle/schema";
 import { parseLang } from "~/shared/lang";
 import type { Lang } from "~/shared/types";
-import { useTranslation } from "~/shared/useTranslation";
+import { useTranslation } from "~/shared/use-translation";
 
 // TODO: Add pagination, create / edit / delete news
 

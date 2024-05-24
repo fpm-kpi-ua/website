@@ -3,8 +3,8 @@ import { MetaProvider } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { ErrorBoundary, Show, Suspense } from "solid-js";
-import { Footer } from "~/components/Footer";
-import { Header } from "~/components/Header";
+import { Footer } from "~/components/footer";
+import { Header } from "~/components/header";
 import "~/styles/index.css";
 
 export default function App() {

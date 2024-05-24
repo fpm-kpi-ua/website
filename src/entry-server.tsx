@@ -1,5 +1,5 @@
 import { StartServer, createHandler } from "@solidjs/start/server";
-import { Polyfills } from "./components/Polyfills";
+import { Polyfills } from "~/components/polyfills";
 
 export default createHandler(() => {
 	return (

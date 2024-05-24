@@ -15,9 +15,9 @@ import { createInsertSchema } from "drizzle-valibot";
 import { For, Show, createEffect, createSignal } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
 import * as v from "valibot";
-import { Input } from "~/components/Input";
-import { Select } from "~/components/Select";
-import { Textarea } from "~/components/Textarea";
+import { Input } from "~/components/input";
+import { Select } from "~/components/select";
+import { Textarea } from "~/components/textarea";
 import { articles } from "~/drizzle/schema";
 import {
 	getArticleHistory,
@@ -28,10 +28,11 @@ import {
 } from "~/shared/article";
 import { existingSections } from "~/shared/constants";
 import { cx } from "~/shared/cx";
-import { formatValidationErrors } from "~/shared/formatValidationErrors";
-import { mdxToHtml } from "~/shared/mdxToHtml";
+import { formatValidationErrors } from "~/shared/format-validation-errors";
+import { mdxToHtml } from "~/shared/mdx-to-html";
 import type { Lang, Section } from "~/shared/types";
-import { useTranslation } from "~/shared/useTranslation";
+import { useTranslation } from "~/shared/use-translation";
+import "@valibot/i18n/uk";
 
 const schema = v.omit(
 	createInsertSchema(articles, {
@@ -295,8 +296,8 @@ function VersionSelector() {
 							}/edit${getSearchParams("createdAt", version.createdAt)}`}
 							class="flex items-center justify-between gap-1"
 						>
-							<span>{version.title}</span>
-							<span>{version.modifiedBy}</span>
+							<span>{version.title},</span>
+							<span>{version.modifiedBy},</span>
 							<span>
 								{new Date(version.createdAt).toLocaleString(params.lang, {
 									year: "numeric",

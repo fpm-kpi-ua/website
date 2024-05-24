@@ -1,6 +1,6 @@
-import { Logo } from "./Logo";
-import { Menu } from "./Menu";
-import { Nav } from "./Nav";
+import { Logo } from "~/components/logo";
+import { Menu } from "~/components/menu";
+import { Nav } from "~/components/nav";
 
 export function Header() {
 	return (

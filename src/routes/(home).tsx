@@ -2,15 +2,15 @@ import { Meta, Title } from "@solidjs/meta";
 import { type RouteLoadFuncArgs, cache, createAsync } from "@solidjs/router";
 import { desc, eq, sql } from "drizzle-orm";
 import { For } from "solid-js";
-import { ArticleCard, ArticleCardWithIcon } from "~/components/ArticleCard";
-import { ProcessorIcon } from "~/components/Icons/ProcessorIcon";
-import { ThemedIcon } from "~/components/ThemedIcon";
+import { ArticleCard, ArticleCardWithIcon } from "~/components/article-card";
+import { ProcessorIcon } from "~/components/icons/processor-icon";
+import { ThemedIcon } from "~/components/themed-icon";
 import { db } from "~/drizzle/db";
 import { news } from "~/drizzle/schema";
 import { breakpoints } from "~/shared/constants";
 import { langLink, parseLang } from "~/shared/lang";
 import type { Lang } from "~/shared/types";
-import { getTranslations, useTranslation } from "~/shared/useTranslation";
+import { getTranslations, useTranslation } from "~/shared/use-translation";
 import "./(home).css";
 
 export const route = {
