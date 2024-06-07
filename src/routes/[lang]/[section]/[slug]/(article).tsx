@@ -5,7 +5,7 @@ import {
 	createAsync,
 	useParams,
 } from "@solidjs/router";
-import { getReadArticle } from "~/shared/article";
+import { getReadArticle } from "~/shared/article.server";
 import { existingSections } from "~/shared/constants";
 import { parseLang } from "~/shared/lang";
 import type { Lang, Section } from "~/shared/types";

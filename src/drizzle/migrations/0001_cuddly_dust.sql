@@ -1,0 +1,1 @@
+ALTER TABLE `news` ADD `preview` text DEFAULT '' NOT NULL;

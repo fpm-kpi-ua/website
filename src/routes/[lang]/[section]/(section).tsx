@@ -8,7 +8,7 @@ import {
 import { For, Show } from "solid-js";
 import { ArticleCard } from "~/components/article-card";
 import { ThemedIcon } from "~/components/themed-icon";
-import { getArticlePreviews } from "~/shared/article";
+import { getArticlePreviews } from "~/shared/article.server";
 import { existingSections } from "~/shared/constants";
 import { langLink, parseLang } from "~/shared/lang";
 import type { Lang, Section } from "~/shared/types";

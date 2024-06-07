@@ -2,34 +2,12 @@ import {
 	A,
 	type RouteLoadFuncArgs,
 	type RouteSectionProps,
-	cache,
 	createAsync,
 } from "@solidjs/router";
-import { desc, eq } from "drizzle-orm";
 import { For } from "solid-js";
-import { db } from "~/drizzle/db";
-import { news } from "~/drizzle/schema";
 import { parseLang } from "~/shared/lang";
-import type { Lang } from "~/shared/types";
+import { getNews } from "~/shared/news.server";
 import { useTranslation } from "~/shared/use-translation";
-
-// TODO: Add pagination, create / edit / delete news
-
-const getNews = cache(async (lang: Lang) => {
-	"use server";
-
-	return db
-		.select({
-			id: news.id,
-			title: news.title,
-			html: news.html,
-			createdAt: news.createdAt,
-		})
-		.from(news)
-		.where(eq(news.lang, lang))
-		.orderBy(desc(news.createdAt))
-		.all();
-}, "news");
 
 export const route = {
 	load: ({ params }: RouteLoadFuncArgs) => {
@@ -54,7 +32,7 @@ export default function News({ location }: RouteSectionProps) {
 										<A href={`${location.search}#news-${n.id}`}>{n.title}</A>
 									</h2>
 									<time dateTime={new Date(n.createdAt).toISOString()}>
-										{new Date(n.createdAt).toLocaleDateString()}
+										{new Date(n.createdAt).toLocaleDateString(lang())}
 									</time>
 									<div class="prose max-w-max-page-width" innerHTML={n.html} />
 								</article>

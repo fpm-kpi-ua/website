@@ -15,14 +15,14 @@ export function Input(props: InputProps) {
 		"error",
 	]);
 	return (
-		<label class={cx("mt-2 grid", local.labelClass)}>
+		<label class={cx("grid", local.labelClass)}>
 			{local.label}
 			<input
 				{...inputProps}
 				aria-invalid={!!local.error?.()}
 				aria-errormessage={`${inputProps.name}-error`}
 				class={cx(
-					"rounded border border-border bg-background px-2 py-1 text-text disabled:cursor-not-allowed hover:border-primary",
+					"h-8 rounded border border-border bg-background px-2 text-text disabled:cursor-not-allowed hover:border-primary",
 					inputProps.class,
 				)}
 			/>

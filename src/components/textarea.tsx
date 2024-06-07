@@ -15,7 +15,7 @@ export function Textarea(props: TextareaProps) {
 		"error",
 	]);
 	return (
-		<label class={cx("mt-2 grid", local.labelClass)}>
+		<label class={cx("grid", local.labelClass)}>
 			{local.label}
 			<textarea
 				{...textareaProps}

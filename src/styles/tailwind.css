@@ -9,6 +9,7 @@
     &:not(.btn, .card__link) {
       @apply hover:underline;
     }
+
     &:not(.btn):focus-visible {
       border-radius: theme("spacing[0.5]");
     }
@@ -19,15 +20,17 @@
   .linecap-round {
     stroke-linecap: round;
   }
+
   .highlight-tap {
     -webkit-tap-highlight-color: rgb(var(--primary-color) / 0.3);
   }
 }
 
 @layer components {
+
   button,
   .btn {
-    @apply font-heading text-primary hover:border-primary active:border-primary;
+    @apply font-heading text-primary hover:border-primary active:border-primary h-8;
     font-size: 0.95rem;
     line-height: normal;
     display: inline-block;

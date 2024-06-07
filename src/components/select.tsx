@@ -15,7 +15,7 @@ export function Select(props: SelectProps) {
 		"error",
 	]);
 	return (
-		<label class={cx("mt-2 grid", local.labelClass)}>
+		<label class={cx("grid", local.labelClass)}>
 			{local.label}
 			<select
 				{...selectProps}

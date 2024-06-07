@@ -8,9 +8,8 @@ import {
 import { createInsertSchema } from "drizzle-valibot";
 import { type Input, omit } from "valibot";
 import { existingSections, supportedLngs } from "~/shared/constants";
-import type { Lang } from "~/shared/types";
 
-export const users = sqliteTable("users", {
+export const t_users = sqliteTable("users", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	email: text("email").unique("email_idx").notNull(),
 	password: text("password").notNull(),
@@ -22,13 +21,13 @@ export const users = sqliteTable("users", {
 		.default(sql`(strftime('%s','now') * 1000)`)
 		.notNull(),
 });
-export type SelectUser = InferSelectModel<typeof users>;
+export type SelectUser = InferSelectModel<typeof t_users>;
 
-export const admins = sqliteTable("admins", {
+export const t_admins = sqliteTable("admins", {
 	userId: text("user_id")
 		.unique()
 		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+		.references(() => t_users.id, { onDelete: "cascade" }),
 	superAdmin: integer("super_admin", { mode: "boolean" })
 		.default(false)
 		.notNull(),
@@ -37,11 +36,11 @@ export const admins = sqliteTable("admins", {
 		.notNull(),
 });
 
-export const teachers = sqliteTable("teachers", {
+export const t_teachers = sqliteTable("teachers", {
 	userId: text("user_id")
 		.unique()
 		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+		.references(() => t_users.id, { onDelete: "cascade" }),
 	folders: text("folders", { mode: "json" }).$type<string[] | null>(),
 	takenSpace: integer("taken_space").default(0).notNull(),
 	allowedSpace: integer("allowed_space").default(500000000).notNull(),
@@ -50,39 +49,40 @@ export const teachers = sqliteTable("teachers", {
 		.notNull(),
 });
 
-export const students = sqliteTable("students", {
+export const t_students = sqliteTable("students", {
 	userId: text("user_id")
 		.unique()
 		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+		.references(() => t_users.id, { onDelete: "cascade" }),
 	group: text("group").notNull(),
 	createdAt: integer("created_at")
 		.default(sql`(strftime('%s','now') * 1000)`)
 		.notNull(),
 });
 
-export const contentManagers = sqliteTable("content_managers", {
+export const t_contentManagers = sqliteTable("content_managers", {
 	userId: text("user_id")
 		.unique()
 		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+		.references(() => t_users.id, { onDelete: "cascade" }),
 	createdAt: integer("created_at")
 		.default(sql`(strftime('%s','now') * 1000)`)
 		.notNull(),
 });
 
-export const news = sqliteTable("news", {
+export const t_news = sqliteTable("news", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	title: text("title").notNull(),
 	source: text("source").notNull(),
+	preview: text("preview").notNull().default(""),
 	html: text("html").notNull(),
-	lang: text("lang").notNull().$type<Lang>(),
+	lang: text("lang", { enum: supportedLngs }).notNull(),
 	createdAt: integer("created_at")
 		.default(sql`(strftime('%s','now') * 1000)`)
 		.notNull(),
 });
 
-export const articles = sqliteTable(
+export const t_articles = sqliteTable(
 	"articles",
 	{
 		lang: text("lang", { enum: supportedLngs }).notNull(),
@@ -99,7 +99,7 @@ export const articles = sqliteTable(
 		html: text("html").notNull(),
 		modifiedBy: integer("modified_by")
 			.notNull()
-			.references(() => users.id),
+			.references(() => t_users.id),
 		createdAt: integer("created_at")
 			.default(sql`(strftime('%s','now') * 1000)`)
 			.notNull(),
@@ -111,40 +111,40 @@ export const articles = sqliteTable(
 	}),
 );
 
-export const insertArticleSchema = omit(createInsertSchema(articles), [
+export const insertArticleSchema = omit(createInsertSchema(t_articles), [
 	"createdAt",
 ]);
 export type InsertArticle = Input<typeof insertArticleSchema>;
 
-export const resetTokens = sqliteTable("reset_tokens", {
+export const t_resetTokens = sqliteTable("reset_tokens", {
 	userId: text("user_id")
 		.notNull()
 		.unique()
-		.references(() => users.id, { onDelete: "cascade" }),
+		.references(() => t_users.id, { onDelete: "cascade" }),
 	token: text("token").notNull(),
 	expiresAt: integer("expires_at").notNull(),
 });
 
 // Relations
-export const userRelations = relations(users, ({ one }) => ({
-	admin: one(admins, {
-		fields: [users.id],
-		references: [admins.userId],
+export const userRelations = relations(t_users, ({ one }) => ({
+	admin: one(t_admins, {
+		fields: [t_users.id],
+		references: [t_admins.userId],
 	}),
-	teacher: one(teachers, {
-		fields: [users.id],
-		references: [teachers.userId],
+	teacher: one(t_teachers, {
+		fields: [t_users.id],
+		references: [t_teachers.userId],
 	}),
-	student: one(students, {
-		fields: [users.id],
-		references: [students.userId],
+	student: one(t_students, {
+		fields: [t_users.id],
+		references: [t_students.userId],
 	}),
-	contentManager: one(contentManagers, {
-		fields: [users.id],
-		references: [contentManagers.userId],
+	contentManager: one(t_contentManagers, {
+		fields: [t_users.id],
+		references: [t_contentManagers.userId],
 	}),
-	resetToken: one(resetTokens, {
-		fields: [users.id],
-		references: [resetTokens.userId],
+	resetToken: one(t_resetTokens, {
+		fields: [t_users.id],
+		references: [t_resetTokens.userId],
 	}),
 }));

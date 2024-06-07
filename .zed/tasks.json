@@ -1,10 +1,12 @@
 [
 	{
-		"label": "Format whole project",
-		"command": "bunx @biomejs/biome check --apply-unsafe src app.config.ts package.json drizzle.config.ts"
+		"label": "bun run $ZED_CUSTOM_script",
+		"command": "bun run",
+		"args": ["$ZED_CUSTOM_script"],
+		"tags": ["package-script"]
 	},
 	{
-		"label": "Start Drizzle Studio",
-		"command": "bunx drizzle-kit studio"
+		"label": "Format whole project",
+		"command": "bunx @biomejs/biome check --write --unsafe src app.config.ts package.json drizzle.config.ts"
 	}
 ]

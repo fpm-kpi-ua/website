@@ -18,14 +18,14 @@ import * as v from "valibot";
 import { Input } from "~/components/input";
 import { Select } from "~/components/select";
 import { Textarea } from "~/components/textarea";
-import { articles } from "~/drizzle/schema";
+import { t_articles } from "~/drizzle/schema";
 import {
 	getArticleHistory,
 	getEditArticle,
 	publishArticle,
 	saveArticle,
 	unpublishArticle,
-} from "~/shared/article";
+} from "~/shared/article.server";
 import { existingSections } from "~/shared/constants";
 import { cx } from "~/shared/cx";
 import { formatValidationErrors } from "~/shared/format-validation-errors";
@@ -35,7 +35,7 @@ import { useTranslation } from "~/shared/use-translation";
 import "@valibot/i18n/uk";
 
 const schema = v.omit(
-	createInsertSchema(articles, {
+	createInsertSchema(t_articles, {
 		title: v.string([v.minLength(1), v.maxLength(255)]),
 		slug: v.string([v.regex(/^[a-z0-9-]+$/)]),
 		isActive: (schema) => v.coerce(schema.isActive, (i) => i === "true"),
@@ -142,7 +142,7 @@ export default function EditArticle({ location }: RouteSectionProps) {
 			+location.query.createdAt,
 		),
 	);
-	const [html, setHtml] = createSignal("");
+	const [html, setHtml] = createSignal(article()?.html ?? "");
 	const [mdx, setMdx] = createSignal(article()?.source ?? "");
 	const submission = useSubmission(save);
 	const [title, setTitle] = createSignal(article()?.title ?? "");
@@ -157,7 +157,7 @@ export default function EditArticle({ location }: RouteSectionProps) {
 
 	createEffect(async () => {
 		const { innerHTML } = await mdxToHtml(mdx());
-		if (!innerHTML) return;
+		if (innerHTML === undefined) return;
 		setHtml(innerHTML);
 	});
 
@@ -171,7 +171,7 @@ export default function EditArticle({ location }: RouteSectionProps) {
 						action={save}
 						class="grid size-full h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] gap-y-4 [grid-template-areas:'meta_mode''editor_editor''buttons_buttons'] [grid-template-columns:1fr_max-content] [grid-template-rows:max-content_1fr_max-content] @xl:gap-x-2 @xl:[grid-template-areas:'meta_buttons''editor_editor'] @xl:[grid-template-rows:max-content_1fr]"
 					>
-						<details class="[grid-area:meta]">
+						<details class="[grid-area:meta] [&>*]:mt-2">
 							<summary class="mb-2 w-max select-none rounded">
 								{title() || t("title")}
 							</summary>
