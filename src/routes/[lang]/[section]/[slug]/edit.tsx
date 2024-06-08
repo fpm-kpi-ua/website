@@ -11,14 +11,12 @@ import {
 	useParams,
 	useSubmission,
 } from "@solidjs/router";
-import { createInsertSchema } from "drizzle-valibot";
 import { For, Show, createEffect, createSignal } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
 import * as v from "valibot";
 import { Input } from "~/components/input";
 import { Select } from "~/components/select";
 import { Textarea } from "~/components/textarea";
-import { t_articles } from "~/drizzle/schema";
 import {
 	getArticleHistory,
 	getEditArticle,
@@ -30,18 +28,10 @@ import { existingSections } from "~/shared/constants";
 import { cx } from "~/shared/cx";
 import { formatValidationErrors } from "~/shared/format-validation-errors";
 import { mdxToHtml } from "~/shared/mdx-to-html";
+import { insertArticleSchema } from "~/shared/schemas";
 import type { Lang, Section } from "~/shared/types";
 import { useTranslation } from "~/shared/use-translation";
 import "@valibot/i18n/uk";
-
-const schema = v.omit(
-	createInsertSchema(t_articles, {
-		title: v.string([v.minLength(1), v.maxLength(255)]),
-		slug: v.string([v.regex(/^[a-z0-9-]+$/)]),
-		isActive: (schema) => v.coerce(schema.isActive, (i) => i === "true"),
-	}),
-	["createdAt"],
-);
 
 const unpublish = action(async (lang: Lang, section: Section, slug: string) => {
 	"use server";
@@ -60,7 +50,7 @@ const save = action(async (data: FormData) => {
 		{ lang, section, slug, modifiedBy: 0 },
 		Object.fromEntries(data),
 	);
-	const res = v.safeParse(schema, input, { lang });
+	const res = v.safeParse(insertArticleSchema, input, { lang });
 	if (!res.success) {
 		return formatValidationErrors(res.issues);
 	}

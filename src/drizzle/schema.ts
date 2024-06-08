@@ -1,12 +1,10 @@
-import { type InferSelectModel, relations, sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
 	integer,
 	primaryKey,
 	sqliteTable,
 	text,
 } from "drizzle-orm/sqlite-core";
-import { createInsertSchema } from "drizzle-valibot";
-import { type Input, omit } from "valibot";
 import { existingSections, supportedLngs } from "~/shared/constants";
 
 export const t_users = sqliteTable("users", {
@@ -21,7 +19,6 @@ export const t_users = sqliteTable("users", {
 		.default(sql`(strftime('%s','now') * 1000)`)
 		.notNull(),
 });
-export type SelectUser = InferSelectModel<typeof t_users>;
 
 export const t_admins = sqliteTable("admins", {
 	userId: text("user_id")
@@ -110,11 +107,6 @@ export const t_articles = sqliteTable(
 		}),
 	}),
 );
-
-export const insertArticleSchema = omit(createInsertSchema(t_articles), [
-	"createdAt",
-]);
-export type InsertArticle = Input<typeof insertArticleSchema>;
 
 export const t_resetTokens = sqliteTable("reset_tokens", {
 	userId: text("user_id")

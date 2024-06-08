@@ -1,18 +1,14 @@
+"use server";
 import { action, cache, json, redirect } from "@solidjs/router";
 import { desc, eq } from "drizzle-orm";
-import { createInsertSchema } from "drizzle-valibot";
 import { getRequestEvent } from "solid-js/web";
 import * as v from "valibot";
 import { db } from "~/drizzle/db";
 import { t_news } from "~/drizzle/schema";
+import { formatValidationErrors } from "./format-validation-errors";
+import { insertNewsSchema } from "./schemas";
 import type { Lang } from "./types";
 import "@valibot/i18n/uk";
-import { formatValidationErrors } from "./format-validation-errors";
-
-const schema = v.omit(
-	createInsertSchema(t_news, { id: v.optional(v.number()) }),
-	["createdAt"],
-);
 
 export const getNewsPreview = cache(async (lang: Lang) => {
 	"use server";
@@ -60,7 +56,7 @@ export const saveNews = action(async (data: FormData) => {
 		+id ? { id: +id, lang } : { lang },
 		Object.fromEntries(data),
 	);
-	const res = v.safeParse(schema, input, { lang });
+	const res = v.safeParse(insertNewsSchema, input, { lang });
 
 	if (!res.success) {
 		return formatValidationErrors(res.issues);
@@ -69,13 +65,12 @@ export const saveNews = action(async (data: FormData) => {
 	const newsExists = news.id
 		? db.select().from(t_news).where(eq(t_news.id, news.id)).all().length > 0
 		: false;
-	console.log(newsExists);
+
 	if (news.id && newsExists) {
 		db.update(t_news).set(news).where(eq(t_news.id, news.id)).run();
 	} else {
 		const { id, ...newsWithoutId } = news;
 		const { lastInsertRowid } = db.insert(t_news).values(newsWithoutId).run();
-		console.log(lastInsertRowid);
 		return redirect(`/${lang}/information/news/${lastInsertRowid}/edit`, {
 			headers: {
 				revalidate: "news,edit-news",
@@ -95,7 +90,6 @@ export const deleteNews = action(async (id: number) => {
 	if (!referrer) return;
 	const url = new URL(referrer);
 	const lang = url.pathname.split("/")[1];
-	console.log(lang, id);
 	db.delete(t_news).where(eq(t_news.id, id)).run();
 	return redirect(`/${lang}/information/news`, {
 		headers: {
