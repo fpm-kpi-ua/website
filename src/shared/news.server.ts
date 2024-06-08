@@ -1,4 +1,3 @@
-"use server";
 import { action, cache, json, redirect } from "@solidjs/router";
 import { desc, eq } from "drizzle-orm";
 import { getRequestEvent } from "solid-js/web";
@@ -8,7 +7,6 @@ import { t_news } from "~/drizzle/schema";
 import { formatValidationErrors } from "./format-validation-errors";
 import { insertNewsSchema } from "./schemas";
 import type { Lang } from "./types";
-import "@valibot/i18n/uk";
 
 export const getNewsPreview = cache(async (lang: Lang) => {
 	"use server";
@@ -48,6 +46,7 @@ export const getEditNews = cache(async (id: number) => {
 
 export const saveNews = action(async (data: FormData) => {
 	"use server";
+	await import("@valibot/i18n/uk");
 	const referrer = getRequestEvent()?.request.headers.get("referer");
 	if (!referrer) return;
 	const url = new URL(referrer);
