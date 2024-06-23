@@ -7,8 +7,8 @@
 			"enabled": false
 		}
 	},
-	"language_servers": ["!eslint", "!vtsls", "biome", "..."],
-	"language_overrides": {
+	"language_servers": ["!eslint", "!typescript-language-server", "..."],
+	"languages": {
 		"JavaScript": {
 			"formatter": {
 				"external": {
