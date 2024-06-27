@@ -48,6 +48,7 @@ export default {
 					"rgb(var(--secondary-background-color) / <alpha-value>)",
 				text: "rgb(var(--text-color) / <alpha-value>)",
 				error: "rgb(var(--error-color) / <alpha-value>)",
+				gray: "var(--gray-color)",
 			},
 			// biome-ignore lint/suspicious/noExplicitAny: have no idea how to fix it
 			typography: (theme: any) => ({

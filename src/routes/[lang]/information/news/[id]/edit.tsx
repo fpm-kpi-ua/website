@@ -12,7 +12,6 @@ import { mdxToHtml } from "~/shared/mdx-to-html";
 import { deleteNews, getEditNews, saveNews } from "~/shared/news.server";
 import type { Lang } from "~/shared/types";
 import { useTranslation } from "~/shared/use-translation";
-import "@valibot/i18n/uk";
 
 export default function EditNews() {
 	const { t } = useTranslation("admin");
@@ -61,7 +60,7 @@ export default function EditNews() {
 							name="title"
 							value={news()?.title}
 							onInput={(e) => setTitle(e.currentTarget.value)}
-							error={() => submission.result?.errors?.title}
+							error={() => submission.error?.validation?.title}
 							labelClass="[grid-area:meta]"
 						/>
 						<div class="flex w-full gap-2 [grid-area:buttons]">
@@ -84,7 +83,7 @@ export default function EditNews() {
 							class="resize-none overflow-x-scroll whitespace-pre font-mono"
 							labelClass="[grid-area:editor]"
 							onInput={(e) => setMdx(e.currentTarget.value)}
-							error={() => submission.result?.errors?.source}
+							error={() => submission.error?.validation?.source}
 						/>
 					</form>
 				</div>

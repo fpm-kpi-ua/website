@@ -1,12 +1,11 @@
 import { action, cache, json, redirect } from "@solidjs/router";
 import { desc, eq } from "drizzle-orm";
 import { getRequestEvent } from "solid-js/web";
-import * as v from "valibot";
 import { db } from "~/drizzle/db";
 import { t_news } from "~/drizzle/schema";
-import { formatValidationErrors } from "./format-validation-errors";
 import { insertNewsSchema } from "./schemas";
 import type { Lang } from "./types";
+import { validate } from "./validate.server";
 
 export const getNewsPreview = cache(async (lang: Lang) => {
 	"use server";
@@ -55,12 +54,7 @@ export const saveNews = action(async (data: FormData) => {
 		+id ? { id: +id, lang } : { lang },
 		Object.fromEntries(data),
 	);
-	const res = v.safeParse(insertNewsSchema, input, { lang });
-
-	if (!res.success) {
-		return formatValidationErrors(res.issues);
-	}
-	const news = res.output;
+	const news = await validate(insertNewsSchema, input, lang as Lang);
 	const newsExists = news.id
 		? db.select().from(t_news).where(eq(t_news.id, news.id)).all().length > 0
 		: false;

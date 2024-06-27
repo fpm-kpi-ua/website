@@ -14,14 +14,14 @@ export const t_users = sqliteTable("users", {
 	salt: text("salt").notNull(),
 	firstName: text("first_name").notNull(),
 	lastName: text("last_name").notNull(),
-	active: integer("active", { mode: "boolean" }).default(false).notNull(),
+	isActive: integer("is_active", { mode: "boolean" }).default(false).notNull(),
 	createdAt: integer("created_at")
 		.default(sql`(strftime('%s','now') * 1000)`)
 		.notNull(),
 });
 
 export const t_admins = sqliteTable("admins", {
-	userId: text("user_id")
+	userId: integer("user_id")
 		.unique()
 		.notNull()
 		.references(() => t_users.id, { onDelete: "cascade" }),
@@ -34,7 +34,7 @@ export const t_admins = sqliteTable("admins", {
 });
 
 export const t_teachers = sqliteTable("teachers", {
-	userId: text("user_id")
+	userId: integer("user_id")
 		.unique()
 		.notNull()
 		.references(() => t_users.id, { onDelete: "cascade" }),
@@ -47,7 +47,7 @@ export const t_teachers = sqliteTable("teachers", {
 });
 
 export const t_students = sqliteTable("students", {
-	userId: text("user_id")
+	userId: integer("user_id")
 		.unique()
 		.notNull()
 		.references(() => t_users.id, { onDelete: "cascade" }),
@@ -58,7 +58,7 @@ export const t_students = sqliteTable("students", {
 });
 
 export const t_contentManagers = sqliteTable("content_managers", {
-	userId: text("user_id")
+	userId: integer("user_id")
 		.unique()
 		.notNull()
 		.references(() => t_users.id, { onDelete: "cascade" }),

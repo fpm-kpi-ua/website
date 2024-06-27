@@ -1,19 +1,12 @@
 {
-	"version": "5",
+	"version": "6",
 	"dialect": "sqlite",
 	"entries": [
 		{
 			"idx": 0,
-			"version": "5",
-			"when": 1714071762282,
-			"tag": "0000_lame_nextwave",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
 			"version": "6",
-			"when": 1717777061326,
-			"tag": "0001_cuddly_dust",
+			"when": 1719340643996,
+			"tag": "0000_past_selene",
 			"breakpoints": true
 		}
 	]

@@ -13,7 +13,6 @@ import {
 } from "@solidjs/router";
 import { For, Show, createEffect, createSignal } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
-import * as v from "valibot";
 import { Input } from "~/components/input";
 import { Select } from "~/components/select";
 import { Textarea } from "~/components/textarea";
@@ -26,12 +25,11 @@ import {
 } from "~/shared/article.server";
 import { existingSections } from "~/shared/constants";
 import { cx } from "~/shared/cx";
-import { formatValidationErrors } from "~/shared/format-validation-errors";
 import { mdxToHtml } from "~/shared/mdx-to-html";
 import { insertArticleSchema } from "~/shared/schemas";
 import type { Lang, Section } from "~/shared/types";
 import { useTranslation } from "~/shared/use-translation";
-import "@valibot/i18n/uk";
+import { validate } from "~/shared/validate.server";
 
 const unpublish = action(async (lang: Lang, section: Section, slug: string) => {
 	"use server";
@@ -50,11 +48,7 @@ const save = action(async (data: FormData) => {
 		{ lang, section, slug, modifiedBy: 0 },
 		Object.fromEntries(data),
 	);
-	const res = v.safeParse(insertArticleSchema, input, { lang });
-	if (!res.success) {
-		return formatValidationErrors(res.issues);
-	}
-	const article = res.output;
+	const article = await validate(insertArticleSchema, input, lang as Lang);
 
 	if (createdAt) {
 		const oldArticle = getEditArticle(
@@ -170,32 +164,32 @@ export default function EditArticle({ location }: RouteSectionProps) {
 								name="slug"
 								disabled={!!article()?.slug}
 								value={article()?.slug}
-								error={() => submission.result?.errors?.slug}
+								error={() => submission.error?.validation?.slug}
 							/>
 							<Input
 								label={t("title")}
 								name="title"
 								value={article()?.title}
 								onInput={(e) => setTitle(e.currentTarget.value)}
-								error={() => submission.result?.errors?.title}
+								error={() => submission.error?.validation?.title}
 							/>
 							<Textarea
 								label={t("description")}
 								name="description"
 								value={article()?.description}
-								error={() => submission.result?.errors?.description}
+								error={() => submission.error?.validation?.description}
 								class="h-28 @lg:h-20"
 							/>
 							<Input
 								label={t("keywords")}
 								name="keywords"
 								value={article()?.keywords ?? ""}
-								error={() => submission.result?.errors?.keywords}
+								error={() => submission.error?.validation?.keywords}
 							/>
 							<Select
 								label={t("articleLang")}
 								name="articleLang"
-								error={() => submission.result?.errors?.articleLang}
+								error={() => submission.error?.validation?.articleLang}
 								class="w-min"
 							>
 								<option
@@ -248,7 +242,7 @@ export default function EditArticle({ location }: RouteSectionProps) {
 								location.query.mode === "history" && "hidden",
 							)}
 							onInput={(e) => setMdx(e.currentTarget.value)}
-							error={() => submission.result?.errors?.source}
+							error={() => submission.error?.validation?.source}
 						/>
 						<Show when={location.query.mode === "history"}>
 							<VersionSelector />

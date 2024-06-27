@@ -1,13 +1,15 @@
 {
 	"version": "6",
 	"dialect": "sqlite",
+	"id": "b7112bc2-df92-4576-9b32-f06258f7416e",
+	"prevId": "00000000-0000-0000-0000-000000000000",
 	"tables": {
 		"admins": {
 			"name": "admins",
 			"columns": {
 				"user_id": {
 					"name": "user_id",
-					"type": "text",
+					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
@@ -40,11 +42,11 @@
 				"admins_user_id_users_id_fk": {
 					"name": "admins_user_id_users_id_fk",
 					"tableFrom": "admins",
-					"columnsFrom": ["user_id"],
 					"tableTo": "users",
+					"columnsFrom": ["user_id"],
 					"columnsTo": ["id"],
-					"onUpdate": "no action",
-					"onDelete": "cascade"
+					"onDelete": "cascade",
+					"onUpdate": "no action"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -145,11 +147,11 @@
 				"articles_modified_by_users_id_fk": {
 					"name": "articles_modified_by_users_id_fk",
 					"tableFrom": "articles",
-					"columnsFrom": ["modified_by"],
 					"tableTo": "users",
+					"columnsFrom": ["modified_by"],
 					"columnsTo": ["id"],
-					"onUpdate": "no action",
-					"onDelete": "no action"
+					"onDelete": "no action",
+					"onUpdate": "no action"
 				}
 			},
 			"compositePrimaryKeys": {
@@ -165,7 +167,7 @@
 			"columns": {
 				"user_id": {
 					"name": "user_id",
-					"type": "text",
+					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
@@ -190,11 +192,11 @@
 				"content_managers_user_id_users_id_fk": {
 					"name": "content_managers_user_id_users_id_fk",
 					"tableFrom": "content_managers",
-					"columnsFrom": ["user_id"],
 					"tableTo": "users",
+					"columnsFrom": ["user_id"],
 					"columnsTo": ["id"],
-					"onUpdate": "no action",
-					"onDelete": "cascade"
+					"onDelete": "cascade",
+					"onUpdate": "no action"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -223,6 +225,14 @@
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
+				},
+				"preview": {
+					"name": "preview",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "''"
 				},
 				"html": {
 					"name": "html",
@@ -288,11 +298,11 @@
 				"reset_tokens_user_id_users_id_fk": {
 					"name": "reset_tokens_user_id_users_id_fk",
 					"tableFrom": "reset_tokens",
-					"columnsFrom": ["user_id"],
 					"tableTo": "users",
+					"columnsFrom": ["user_id"],
 					"columnsTo": ["id"],
-					"onUpdate": "no action",
-					"onDelete": "cascade"
+					"onDelete": "cascade",
+					"onUpdate": "no action"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -303,7 +313,7 @@
 			"columns": {
 				"user_id": {
 					"name": "user_id",
-					"type": "text",
+					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
@@ -335,11 +345,11 @@
 				"students_user_id_users_id_fk": {
 					"name": "students_user_id_users_id_fk",
 					"tableFrom": "students",
-					"columnsFrom": ["user_id"],
 					"tableTo": "users",
+					"columnsFrom": ["user_id"],
 					"columnsTo": ["id"],
-					"onUpdate": "no action",
-					"onDelete": "cascade"
+					"onDelete": "cascade",
+					"onUpdate": "no action"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -350,7 +360,7 @@
 			"columns": {
 				"user_id": {
 					"name": "user_id",
-					"type": "text",
+					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
@@ -398,11 +408,11 @@
 				"teachers_user_id_users_id_fk": {
 					"name": "teachers_user_id_users_id_fk",
 					"tableFrom": "teachers",
-					"columnsFrom": ["user_id"],
 					"tableTo": "users",
+					"columnsFrom": ["user_id"],
 					"columnsTo": ["id"],
-					"onUpdate": "no action",
-					"onDelete": "cascade"
+					"onDelete": "cascade",
+					"onUpdate": "no action"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -453,8 +463,8 @@
 					"notNull": true,
 					"autoincrement": false
 				},
-				"active": {
-					"name": "active",
+				"is_active": {
+					"name": "is_active",
 					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
@@ -484,9 +494,8 @@
 	},
 	"enums": {},
 	"_meta": {
+		"schemas": {},
 		"tables": {},
 		"columns": {}
-	},
-	"id": "355ddcfa-402c-4f9a-8e47-42b03205ac57",
-	"prevId": "00000000-0000-0000-0000-000000000000"
+	}
 }

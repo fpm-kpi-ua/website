@@ -6,6 +6,13 @@ export const existingSections = [
 	"information",
 ] as const;
 
+export const existingRoles = [
+	"admin",
+	"teacher",
+	"student",
+	"content-manager",
+] as const;
+
 export const supportedLngs = ["en", "uk"] as const;
 
 export const breakpoints = {

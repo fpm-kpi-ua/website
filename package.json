@@ -16,13 +16,14 @@
 		"@solidjs/router": "^0.13.6",
 		"@solidjs/start": "^1.0.2",
 		"@valibot/i18n": "^0.13.0",
+		"argon2": "^0.40.3",
 		"better-sqlite3": "^9.6.0",
 		"cyrillic-to-translit-js": "^3.2.1",
 		"drizzle-orm": "^0.30.10",
 		"remark-gfm": "^4.0.0",
 		"solid-js": "^1.8.17",
 		"unist-util-visit": "^5.0.0",
-		"valibot": "^0.31.1",
+		"valibot": "^0.33.3",
 		"vinxi": "^0.3.12"
 	},
 	"devDependencies": {

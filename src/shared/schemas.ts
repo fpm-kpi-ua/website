@@ -1,5 +1,7 @@
 import {
 	type InferOutput,
+	email,
+	literal,
 	minLength,
 	number,
 	object,
@@ -10,6 +12,7 @@ import {
 	transform,
 	trim,
 	unknown,
+	variant,
 } from "valibot";
 import { existingSections, supportedLngs } from "./constants";
 
@@ -49,3 +52,37 @@ export const insertNewsSchema = object({
 	lang: picklist(supportedLngs),
 });
 export type InsertNews = InferOutput<typeof insertNewsSchema>;
+
+const commonUserSchema = object({
+	email: pipe(string(), trim(), email()),
+	password: pipe(string(), trim(), minLength(6)),
+	firstName: pipe(string(), trim(), minLength(2)),
+	lastName: pipe(string(), trim(), minLength(2)),
+});
+
+export const insertUserSchema = variant("role", [
+	object({
+		...commonUserSchema.entries,
+		role: literal("admin"),
+	}),
+	object({
+		...commonUserSchema.entries,
+		role: literal("content-manager"),
+	}),
+	object({
+		...commonUserSchema.entries,
+		role: literal("teacher"),
+	}),
+	object({
+		...commonUserSchema.entries,
+		role: literal("student"),
+		group: pipe(string(), trim(), minLength(2)),
+	}),
+]);
+
+export const loginSchema = object({
+	email: pipe(string(), trim(), email()),
+	password: pipe(string(), trim(), minLength(6)),
+});
+
+export type InsertUser = InferOutput<typeof insertUserSchema>;

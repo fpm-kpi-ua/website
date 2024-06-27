@@ -1,5 +1,5 @@
 CREATE TABLE `admins` (
-	`user_id` text NOT NULL,
+	`user_id` integer NOT NULL,
 	`super_admin` integer DEFAULT false NOT NULL,
 	`created_at` integer DEFAULT (strftime('%s','now') * 1000) NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
@@ -23,7 +23,7 @@ CREATE TABLE `articles` (
 );
 --> statement-breakpoint
 CREATE TABLE `content_managers` (
-	`user_id` text NOT NULL,
+	`user_id` integer NOT NULL,
 	`created_at` integer DEFAULT (strftime('%s','now') * 1000) NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -32,6 +32,7 @@ CREATE TABLE `news` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`title` text NOT NULL,
 	`source` text NOT NULL,
+	`preview` text DEFAULT '' NOT NULL,
 	`html` text NOT NULL,
 	`lang` text NOT NULL,
 	`created_at` integer DEFAULT (strftime('%s','now') * 1000) NOT NULL
@@ -45,14 +46,14 @@ CREATE TABLE `reset_tokens` (
 );
 --> statement-breakpoint
 CREATE TABLE `students` (
-	`user_id` text NOT NULL,
+	`user_id` integer NOT NULL,
 	`group` text NOT NULL,
 	`created_at` integer DEFAULT (strftime('%s','now') * 1000) NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `teachers` (
-	`user_id` text NOT NULL,
+	`user_id` integer NOT NULL,
 	`folders` text,
 	`taken_space` integer DEFAULT 0 NOT NULL,
 	`allowed_space` integer DEFAULT 500000000 NOT NULL,
@@ -67,7 +68,7 @@ CREATE TABLE `users` (
 	`salt` text NOT NULL,
 	`first_name` text NOT NULL,
 	`last_name` text NOT NULL,
-	`active` integer DEFAULT false NOT NULL,
+	`is_active` integer DEFAULT false NOT NULL,
 	`created_at` integer DEFAULT (strftime('%s','now') * 1000) NOT NULL
 );
 --> statement-breakpoint

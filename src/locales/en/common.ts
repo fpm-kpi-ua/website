@@ -2,9 +2,25 @@ import type dictType from "~/locales/uk/common";
 
 export default {
 	FPM: "FAM",
-	signIn: "Sign In",
-	signUp: "Sign Up",
-	signOut: "Sign Out",
+	auth: {
+		login: "Log In",
+		register: "Register",
+		logout: "Log Out",
+		email: "Email",
+		password: "Password",
+		firstName: "First Name",
+		lastName: "Last Name",
+		role: "Role",
+		group: "Group",
+		invalidEmailOrPass: "Invalid email or password",
+		userAlreadyExists: "User with this email already exists",
+		roles: {
+			admin: "Admin",
+			student: "Student",
+			teacher: "Teacher",
+			"content-manager": "Content Manager",
+		},
+	},
 	emptySection: "There are no articles in this category yet.",
 	articleOfDifferentLang: "This article has only a Ukrainian version",
 	search: "Search",

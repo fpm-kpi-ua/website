@@ -23,63 +23,6 @@ const getSectionPreview = cache(async (lang: Lang, section: Section) => {
 	return getArticlePreviews(lang, section);
 }, "sections");
 
-const images: Record<
-	Section,
-	Record<number | "first" | "last", { class: string; path: string }>
-> = {
-	about: {
-		first: { class: "icon", path: "person/2" },
-		8: {
-			class: "icon--big flip hidden md:flex",
-			path: "person/3",
-		},
-		last: {
-			class: "icon flex md:hidden icon--footer",
-			path: "person/footer-2",
-		},
-	},
-	admission: {
-		first: { class: "icon--big", path: "person/4" },
-		last: {
-			class: "icon flex md:hidden icon--footer",
-			path: "person/footer-1",
-		},
-	},
-	study: {
-		first: { class: "icon--big", path: "person/5" },
-		3: {
-			class: "icon--big flip hidden md:flex",
-			path: "person/6",
-		},
-		last: {
-			class: "icon flex md:hidden icon--footer",
-			path: "person/footer-2",
-		},
-	},
-	deanery: {
-		first: { class: "icon--big", path: "person/5" },
-		5: {
-			class: "icon--big  hidden md:flex",
-			path: "person/6",
-		},
-		last: {
-			class: "icon flex md:hidden icon--footer",
-			path: "person/footer-1",
-		},
-	},
-	information: {
-		first: { class: "icon--big", path: "person/7" },
-		10: {
-			class: "icon flip hidden md:flex",
-			path: "person/3",
-		},
-		last: {
-			class: "icon  flex md:hidden icon--footer",
-			path: "person/footer-3",
-		},
-	},
-};
-
 export const route = {
 	load: ({ params }: RouteLoadFuncArgs) => {
 		getSectionPreview(parseLang(params.lang), params.section as Section);
@@ -147,3 +90,60 @@ export default function Sections() {
 		</>
 	);
 }
+
+const images: Record<
+	Section,
+	Record<number | "first" | "last", { class: string; path: string }>
+> = {
+	about: {
+		first: { class: "icon", path: "person/2" },
+		8: {
+			class: "icon--big flip hidden md:flex",
+			path: "person/3",
+		},
+		last: {
+			class: "icon flex md:hidden icon--footer",
+			path: "person/footer-2",
+		},
+	},
+	admission: {
+		first: { class: "icon--big", path: "person/4" },
+		last: {
+			class: "icon flex md:hidden icon--footer",
+			path: "person/footer-1",
+		},
+	},
+	study: {
+		first: { class: "icon--big", path: "person/5" },
+		3: {
+			class: "icon--big flip hidden md:flex",
+			path: "person/6",
+		},
+		last: {
+			class: "icon flex md:hidden icon--footer",
+			path: "person/footer-2",
+		},
+	},
+	deanery: {
+		first: { class: "icon--big", path: "person/5" },
+		5: {
+			class: "icon--big  hidden md:flex",
+			path: "person/6",
+		},
+		last: {
+			class: "icon flex md:hidden icon--footer",
+			path: "person/footer-1",
+		},
+	},
+	information: {
+		first: { class: "icon--big", path: "person/7" },
+		10: {
+			class: "icon flip hidden md:flex",
+			path: "person/3",
+		},
+		last: {
+			class: "icon  flex md:hidden icon--footer",
+			path: "person/footer-3",
+		},
+	},
+};

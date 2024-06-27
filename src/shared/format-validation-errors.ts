@@ -1,13 +1,11 @@
-import type { SchemaIssues } from "valibot";
+import type { BaseIssue, BaseSchema, SafeParseResult } from "valibot";
 
-export function formatValidationErrors(issues: SchemaIssues) {
-	return {
-		errors: issues.reduce(
-			(acc, issue) => {
-				acc[issue.path?.at(0)?.key as string] = issue.message;
-				return acc;
-			},
-			{} as Record<string, string>,
-		),
-	};
+export function formatValidationErrors<
+	T extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(issues: SafeParseResult<T>["issues"]) {
+	return issues!.reduce((acc, issue) => {
+		// @ts-expect-error - issue is not typed
+		acc[issue.path?.at(0)?.key as string] = issue.message;
+		return acc;
+	});
 }
