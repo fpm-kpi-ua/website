@@ -3,9 +3,9 @@ import { desc, eq } from "drizzle-orm";
 import { getRequestEvent } from "solid-js/web";
 import { db } from "~/drizzle/db";
 import { t_news } from "~/drizzle/schema";
-import { insertNewsSchema } from "./schemas";
-import type { Lang } from "./types";
-import { validate } from "./validate.server";
+import { insertNewsSchema } from "~/shared/schemas";
+import type { Lang } from "~/shared/types";
+import { validate } from "~/shared/validate.server";
 
 export const getNewsPreview = cache(async (lang: Lang) => {
 	"use server";

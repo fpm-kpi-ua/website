@@ -3,8 +3,8 @@ import { cache, createAsync, useLocation } from "@solidjs/router";
 import type adminDict from "~/locales/uk/admin";
 import type commonDict from "~/locales/uk/common";
 import type homeDict from "~/locales/uk/home";
+import { parseLang } from "~/shared/lang";
 import type { Lang } from "~/shared/types";
-import { parseLang } from "./lang";
 
 type Modules = {
 	common: typeof commonDict;

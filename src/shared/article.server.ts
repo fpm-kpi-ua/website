@@ -3,8 +3,8 @@
 import { and, desc, eq, max, sql } from "drizzle-orm";
 import { db } from "~/drizzle/db";
 import { t_articles } from "~/drizzle/schema";
-import type { InsertArticle } from "./schemas";
-import type { Lang, Section } from "./types";
+import type { InsertArticle } from "~/shared/schemas";
+import type { Lang, Section } from "~/shared/types";
 
 export function getArticlePreviews(lang: Lang, section: Section) {
 	return db

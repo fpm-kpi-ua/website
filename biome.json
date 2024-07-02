@@ -1,13 +1,12 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.8.0/schema.json",
+	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
 	"files": {
 		"ignore": [
 			"node_modules/**",
 			"**/build/**",
 			".output/**",
 			".vinxi/**",
-			"public/**",
-			"**/*.css"
+			"public/**"
 		]
 	},
 	"formatter": {
@@ -17,7 +16,8 @@
 		"rules": {
 			"recommended": true,
 			"nursery": {
-				"useSortedClasses": "error"
+				"useSortedClasses": "error",
+				"noReactSpecificProps": "error"
 			},
 			"a11y": {
 				"noSvgWithoutTitle": "off"

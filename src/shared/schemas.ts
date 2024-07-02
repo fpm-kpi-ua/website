@@ -14,7 +14,7 @@ import {
 	unknown,
 	variant,
 } from "valibot";
-import { existingSections, supportedLngs } from "./constants";
+import { existingSections, supportedLngs } from "~/shared/constants";
 
 const optionalString = pipe(
 	optional(string()),

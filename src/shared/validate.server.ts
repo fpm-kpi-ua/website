@@ -6,8 +6,8 @@ import {
 	type InferOutput,
 	safeParseAsync,
 } from "valibot";
-import { formatValidationErrors } from "./format-validation-errors";
-import type { Lang } from "./types";
+import { formatValidationErrors } from "~/shared/format-validation-errors";
+import type { Lang } from "~/shared/types";
 
 /**
  * @returns parsed input

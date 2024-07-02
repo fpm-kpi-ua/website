@@ -3,6 +3,8 @@ import { hash } from "argon2";
 import { eq } from "drizzle-orm";
 import { Show, createEffect, createSignal } from "solid-js";
 import { For, getRequestEvent } from "solid-js/web";
+import { Input } from "~/components/input";
+import { Select } from "~/components/select";
 import { db } from "~/drizzle/db";
 import {
 	t_admins,
@@ -16,8 +18,6 @@ import { parseLang } from "~/shared/lang";
 import { insertUserSchema } from "~/shared/schemas";
 import { getTranslations, useTranslation } from "~/shared/use-translation";
 import { validate } from "~/shared/validate.server";
-import { Input } from "./input";
-import { Select } from "./select";
 
 const register = action(async (data: FormData) => {
 	"use server";
