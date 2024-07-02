@@ -54,7 +54,7 @@ export default function EditNews() {
 					<form
 						method="post"
 						action={saveNews}
-						class="grid size-full h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] gap-y-2 [grid-template-areas:'meta''editor''buttons'] [grid-template-columns:1fr_max-content] [grid-template-rows:max-content_1fr_max-content] @xl:gap-x-2 @xl:[grid-template-areas:'meta_buttons''editor_editor'] @xl:[grid-template-rows:max-content_1fr]"
+						class="grid size-full h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] @xl:gap-x-2 gap-y-2 @xl:[grid-template-areas:'meta_buttons''editor_editor'] @xl:[grid-template-rows:max-content_1fr] [grid-template-areas:'meta''editor''buttons'] [grid-template-columns:1fr_max-content] [grid-template-rows:max-content_1fr_max-content]"
 					>
 						<Input
 							name="title"

@@ -22,7 +22,7 @@ export function Input(props: InputProps) {
 				aria-invalid={!!local.error?.()}
 				aria-errormessage={`${inputProps.name}-error`}
 				class={cx(
-					"h-8 rounded border border-border bg-background px-2 text-text disabled:cursor-not-allowed hover:border-primary",
+					"h-8 rounded border border-border bg-background px-2 text-text hover:border-primary disabled:cursor-not-allowed",
 					inputProps.class,
 				)}
 			/>

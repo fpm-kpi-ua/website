@@ -53,7 +53,7 @@ export function LoginModal() {
 			</button>
 			<div
 				popover
-				id="login-form"
+				id="login-form-modal"
 				class="w-full max-w-lg rounded bg-background-secondary p-4 text-text shadow"
 			>
 				<form method="post" action={login} class="grid gap-2">

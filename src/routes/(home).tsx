@@ -25,7 +25,7 @@ export default function Home() {
 			<Meta name="og:title" content={t("main.h1")} />
 			<Meta name="og:description" content={t("main.p")} />
 			<div class="mx-auto my-0 w-full max-w-max-page-width">
-				<section class="mt-12 mb-8 grid min-h-[calc(var(--vh)_/_2)] grid-cols-1 items-center text-center duration-0 lg:min-h-[30rem] md:grid-cols-[2fr_1fr] md:text-start">
+				<section class="mt-12 mb-8 grid min-h-[calc(var(--vh)_/_2)] grid-cols-1 items-center text-center duration-0 md:grid-cols-[2fr_1fr] md:text-start lg:min-h-[30rem]">
 					<div class="md:-order-none order-2 self-start md:self-auto">
 						<h1 class="text-primary">{t("main.h1")}</h1>
 						<p class="mt-4 text-balance">{t("main.p")}</p>

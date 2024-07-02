@@ -153,7 +153,7 @@ export default function EditArticle({ location }: RouteSectionProps) {
 					<form
 						method="post"
 						action={save}
-						class="grid size-full h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] gap-y-4 [grid-template-areas:'meta_mode''editor_editor''buttons_buttons'] [grid-template-columns:1fr_max-content] [grid-template-rows:max-content_1fr_max-content] @xl:gap-x-2 @xl:[grid-template-areas:'meta_buttons''editor_editor'] @xl:[grid-template-rows:max-content_1fr]"
+						class="grid size-full h-[calc(var(--vh)_-_theme('spacing.header-height')_-_2_*_theme('spacing.sides-padding'))] @xl:gap-x-2 gap-y-4 @xl:[grid-template-areas:'meta_buttons''editor_editor'] @xl:[grid-template-rows:max-content_1fr] [grid-template-areas:'meta_mode''editor_editor''buttons_buttons'] [grid-template-columns:1fr_max-content] [grid-template-rows:max-content_1fr_max-content]"
 					>
 						<details class="[grid-area:meta] [&>*]:mt-2">
 							<summary class="mb-2 w-max select-none rounded">
@@ -178,7 +178,7 @@ export default function EditArticle({ location }: RouteSectionProps) {
 								name="description"
 								value={article()?.description}
 								error={() => submission.error?.validation?.description}
-								class="h-28 @lg:h-20"
+								class="@lg:h-20 h-28"
 							/>
 							<Input
 								label={t("keywords")}
@@ -212,15 +212,15 @@ export default function EditArticle({ location }: RouteSectionProps) {
 						</details>
 						<A
 							activeClass=""
-							class="absolute right-0 my-1 font-heading [grid-area:mode] @xl:hidden"
+							class="absolute right-0 my-1 @xl:hidden font-heading [grid-area:mode]"
 							href={getSearchParams("mode", oppositeMode())}
 						>
 							{t(oppositeMode())}
 						</A>
-						<div class="flex w-full gap-2 [grid-area:buttons] @xl:absolute @xl:right-0 @xl:w-min">
+						<div class="@xl:absolute @xl:right-0 flex @xl:w-min w-full gap-2 [grid-area:buttons]">
 							<A
 								activeClass=""
-								class="my-1 hidden font-heading @xl:block"
+								class="my-1 @xl:block hidden font-heading"
 								href={getSearchParams("mode", oppositeMode())}
 							>
 								{t(oppositeMode())}

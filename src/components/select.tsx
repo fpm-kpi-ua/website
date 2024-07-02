@@ -22,7 +22,7 @@ export function Select(props: SelectProps) {
 				aria-invalid={!!local.error?.()}
 				aria-errormessage={`${selectProps.name}-error`}
 				class={cx(
-					"rounded border border-border bg-background px-2 py-1 text-text disabled:cursor-not-allowed hover:border-primary",
+					"rounded border border-border bg-background px-2 py-1 text-text hover:border-primary disabled:cursor-not-allowed",
 					selectProps.class,
 				)}
 			>
