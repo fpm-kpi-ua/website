@@ -12,6 +12,7 @@ export default {
 		group: "Група",
 		invalidEmailOrPass: "Не вірний email або пароль",
 		userAlreadyExists: "Користувач з такою електронною поштою вже існує",
+		accountNotActive: "Акаунт не активовано",
 		roles: {
 			admin: "Адміністратор",
 			teacher: "Викладач",

@@ -23,6 +23,7 @@ import {
 	saveArticle,
 	unpublishArticle,
 } from "~/shared/article.server";
+import { checkAccessRights } from "~/shared/check-access-rights.server";
 import { existingSections } from "~/shared/constants";
 import { cx } from "~/shared/cx";
 import { mdxToHtml } from "~/shared/mdx-to-html";
@@ -33,15 +34,15 @@ import { validate } from "~/shared/validate.server";
 
 const unpublish = action(async (lang: Lang, section: Section, slug: string) => {
 	"use server";
+	await checkAccessRights("content-manager");
 	unpublishArticle(lang, section, slug);
 	return {};
 }, "article-versions");
 
 const save = action(async (data: FormData) => {
 	"use server";
-	const referrer = getRequestEvent()?.request.headers.get("referer");
-	if (!referrer) return;
-	const url = new URL(referrer);
+	await checkAccessRights("content-manager");
+	const url = new URL(getRequestEvent()?.request.url ?? "");
 	const [, lang, section, slug] = url.pathname.split("/");
 	let createdAt = Number(url.searchParams.get("createdAt"));
 	const input = Object.assign(
@@ -85,6 +86,7 @@ const save = action(async (data: FormData) => {
 const getArticle = cache(
 	async (lang: Lang, section: Section, slug: string, version?: number) => {
 		"use server";
+		await checkAccessRights("content-manager");
 		if (!existingSections.includes(section)) {
 			throw new Error("Such section does not exist");
 		}
@@ -96,6 +98,7 @@ const getArticle = cache(
 const getArticleVersions = cache(
 	async (lang: Lang, section: Section, slug: string) => {
 		"use server";
+		await checkAccessRights("content-manager");
 		if (!existingSections.includes(section)) {
 			throw new Error("Such section does not exist");
 		}
@@ -147,7 +150,7 @@ export default function EditArticle({ location }: RouteSectionProps) {
 
 	return (
 		<>
-			<Title>{article()?.title}</Title>
+			<Title>{article()?.title || title()}</Title>
 			<div class="flex w-full flex-col gap-2 lg:flex-row">
 				<div class="@container w-full">
 					<form

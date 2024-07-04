@@ -50,9 +50,18 @@
 
   .btn--danger {
     color: rgb(var(--error-color));
+
+    &:hover {
+      color: rgb(var(--error-color));
+    }
   }
 
-  .btn--danger:hover {
-    border-color: rgb(var(--error-color));
+  .btn--link {
+    @apply text-primary bg-transparent rounded border-transparent p-0 text-base;
+
+    &:hover,
+    &:active {
+      @apply underline border-transparent;
+    }
   }
 }

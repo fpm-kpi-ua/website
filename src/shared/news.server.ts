@@ -3,9 +3,11 @@ import { desc, eq } from "drizzle-orm";
 import { getRequestEvent } from "solid-js/web";
 import { db } from "~/drizzle/db";
 import { t_news } from "~/drizzle/schema";
+import { checkAccessRights } from "~/shared/check-access-rights.server";
 import { insertNewsSchema } from "~/shared/schemas";
 import type { Lang } from "~/shared/types";
 import { validate } from "~/shared/validate.server";
+import { getLang } from "./server-utils";
 
 export const getNewsPreview = cache(async (lang: Lang) => {
 	"use server";
@@ -40,15 +42,14 @@ export const getNews = cache(async (lang: Lang) => {
 
 export const getEditNews = cache(async (id: number) => {
 	"use server";
+	await checkAccessRights("content-manager");
 	return db.select().from(t_news).where(eq(t_news.id, id)).get();
 }, "edit-news");
 
 export const saveNews = action(async (data: FormData) => {
 	"use server";
-	await import("@valibot/i18n/uk");
-	const referrer = getRequestEvent()?.request.headers.get("referer");
-	if (!referrer) return;
-	const url = new URL(referrer);
+	await checkAccessRights("content-manager");
+	const url = new URL(getRequestEvent()?.request.url ?? "");
 	const [, lang, , , id] = url.pathname.split("/");
 	const input = Object.assign(
 		+id ? { id: +id, lang } : { lang },
@@ -79,10 +80,8 @@ export const saveNews = action(async (data: FormData) => {
 
 export const deleteNews = action(async (id: number) => {
 	"use server";
-	const referrer = getRequestEvent()?.request.headers.get("referer");
-	if (!referrer) return;
-	const url = new URL(referrer);
-	const lang = url.pathname.split("/")[1];
+	await checkAccessRights("content-manager");
+	const lang = getLang();
 	db.delete(t_news).where(eq(t_news.id, id)).run();
 	return redirect(`/${lang}/information/news`, {
 		headers: {

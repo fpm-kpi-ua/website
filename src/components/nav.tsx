@@ -7,12 +7,7 @@ import { useTranslation } from "~/shared/use-translation";
 export function Nav(props: { isPopup: boolean }) {
 	const { t, lang } = useTranslation();
 	return (
-		<nav
-			class={cx(
-				"flex",
-				props.isPopup ? "justify-center lg:hidden" : "hidden lg:flex",
-			)}
-		>
+		<nav class={cx("flex", props.isPopup ? "lg:hidden" : "hidden lg:flex")}>
 			<ul
 				class={cx(
 					"m-0",

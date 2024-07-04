@@ -1,6 +1,7 @@
 import { LanguageSwitcher } from "~/components/language-switcher";
 import { useTranslation } from "~/shared/use-translation";
 import "~/components/menu.css";
+import { AuthButtons } from "~/components/auth-buttons";
 import { Nav } from "~/components/nav";
 
 export function Menu() {
@@ -19,6 +20,7 @@ export function Menu() {
 				<div class="grid justify-center gap-4 p-sides-padding pt-1">
 					<Nav isPopup />
 					<LanguageSwitcher />
+					<AuthButtons />
 				</div>
 			</div>
 			<button

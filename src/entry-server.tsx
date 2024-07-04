@@ -1,5 +1,6 @@
 import { StartServer, createHandler } from "@solidjs/start/server";
 import { Polyfills } from "~/components/polyfills";
+import "~/shared/validate-process-env";
 
 export default createHandler(() => {
 	return (

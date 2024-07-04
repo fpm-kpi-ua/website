@@ -14,6 +14,7 @@ export default {
 		group: "Group",
 		invalidEmailOrPass: "Invalid email or password",
 		userAlreadyExists: "User with this email already exists",
+		accountNotActive: "Account is not active",
 		roles: {
 			admin: "Admin",
 			student: "Student",

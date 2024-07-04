@@ -13,7 +13,7 @@ import type { Lang, Section } from "~/shared/types";
 const getArticle = cache(async (lang: Lang, section: Section, slug: string) => {
 	"use server";
 	if (!existingSections.includes(section)) {
-		throw new Error("Such section does not exist");
+		throw "Such section does not exist";
 	}
 	return getReadArticle(lang, section, slug);
 }, "article");

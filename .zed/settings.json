@@ -64,20 +64,6 @@
 					]
 				}
 			}
-		},
-		"CSS": {
-			"formatter": {
-				"external": {
-					"command": "./node_modules/.bin/biome",
-					"arguments": [
-						"check",
-						"--stdin-file-path",
-						"{buffer_path}",
-						"--write",
-						"--unsafe"
-					]
-				}
-			}
 		}
 	}
 }

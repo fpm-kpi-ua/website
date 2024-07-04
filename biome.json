@@ -6,11 +6,15 @@
 			"**/build/**",
 			".output/**",
 			".vinxi/**",
-			"public/**"
+			"public/**",
+			"**/*.css"
 		]
 	},
 	"formatter": {
 		"formatWithErrors": true
+	},
+	"organizeImports": {
+		"enabled": true
 	},
 	"linter": {
 		"rules": {

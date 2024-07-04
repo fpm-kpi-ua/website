@@ -1,24 +1,23 @@
-import { action, useSubmission } from "@solidjs/router";
+import { action, redirect, useSubmission } from "@solidjs/router";
 import { verify } from "argon2";
 import { eq } from "drizzle-orm";
 import { createEffect } from "solid-js";
-import { getRequestEvent } from "solid-js/web";
 import { Input } from "~/components/input";
 import { db } from "~/drizzle/db";
 import { t_users } from "~/drizzle/schema";
-import { parseLang } from "~/shared/lang";
+import { checkAccessRights } from "~/shared/check-access-rights.server";
+import { langLink } from "~/shared/lang";
 import { loginSchema } from "~/shared/schemas";
-import { getUserSession } from "~/shared/session";
+import { getLang } from "~/shared/server-utils";
+import { getUserSession, revalidateSession } from "~/shared/session.server";
 import { getTranslations, useTranslation } from "~/shared/use-translation";
 import { validate } from "~/shared/validate.server";
 
 const login = action(async (data: FormData) => {
 	"use server";
-	const referrer = getRequestEvent()?.request.headers.get("referer");
-	if (!referrer) return { success: false };
-	const url = new URL(referrer);
-	const lang = parseLang(url.pathname.split("/")[1]);
-
+	await checkAccessRights("unauthorized");
+	const session = await getUserSession();
+	const lang = getLang();
 	const { email, password } = await validate(loginSchema, data, lang);
 	const locales = await getTranslations(lang, "common");
 
@@ -33,11 +32,13 @@ const login = action(async (data: FormData) => {
 	if (!user) throw invalidEmailOrPass;
 	const isValid = await verify(user.password, password + user.salt);
 	if (!isValid) throw invalidEmailOrPass;
-
-	return { success: true };
+	if (!user.isActive)
+		throw { validation: { email: locales["auth.accountNotActive"] } };
+	await revalidateSession(session, user.id);
+	return redirect(langLink(lang));
 });
 
-export function LoginModal() {
+export function LoginForm() {
 	const { t } = useTranslation();
 	const submission = useSubmission(login);
 
@@ -48,33 +49,22 @@ export function LoginModal() {
 	});
 
 	return (
-		<>
-			<button type="button" popovertarget="login-form-modal">
+		<form method="post" action={login} class="grid gap-2">
+			<Input
+				name="email"
+				type="email"
+				label={t("auth.email")}
+				error={() => submission.error?.validation?.email}
+			/>
+			<Input
+				name="password"
+				type="password"
+				label={t("auth.password")}
+				error={() => submission.error?.validation?.password}
+			/>
+			<button type="submit" class="btn--primary">
 				{t("auth.login")}
 			</button>
-			<div
-				popover
-				id="login-form-modal"
-				class="w-full max-w-lg rounded bg-background-secondary p-4 text-text shadow"
-			>
-				<form method="post" action={login} class="grid gap-2">
-					<Input
-						name="email"
-						type="email"
-						label={t("auth.email")}
-						error={() => submission.error?.validation?.email}
-					/>
-					<Input
-						name="password"
-						type="password"
-						label={t("auth.password")}
-						error={() => submission.error?.validation?.password}
-					/>
-					<button type="submit" class="btn--primary">
-						{t("auth.login")}
-					</button>
-				</form>
-			</div>
-		</>
+		</form>
 	);
 }
