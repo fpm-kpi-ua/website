@@ -1,38 +1,48 @@
-# SolidStart
+# FAM Website
+This is a website for the Faculty of applied mathematics, Kyiv Polytechnic Institute, Ukraine.
 
-Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);
+## Stack
+- Runtime: [Node.js](https://nodejs.org)
+- Database: SQLite
+- ORM: [Drizzle](https://orm.drizzle.team/docs)
+- Framework: [`SolidStart`](https://docs.solidjs.com/solid-start)
+- Validation: [Valibot](https://valibot.dev)
+- Package manager: [Bun](https://bun.sh)
 
-## Creating a project
+## Installation
+Make sure you have bun installed on your machine
 
-```bash
-# create a new project in the current directory
-npm init solid@latest
+```sh
+# macOS, Linux, WSL
+curl -fsSL https://bun.sh/install | bash
 
-# create a new project in my-app
-npm init solid@latest my-app
+# Windows
+powershell -c "irm bun.sh/install.ps1|iex"
+```
+To install packages, run
+
+```sh
+bun i
 ```
 
 ## Developing
+To start project, run
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```sh
+bun dev
 ```
 
-## Building
+To run project in production mode, run
 
-Solid apps are built with _presets_, which optimise your project for deployment to different environments.
+```sh
+bun run build
+bun run start
+```
 
-By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different preset, add it to the `devDependencies` in `package.json` and specify in your `app.config.js`.
-
-## Todo:
-
-- [] - Add login/register pages
-- [] - Add user profile page
-- [] - Protect admin routes
-- [] - Add admin dashboard
-- [] - Generate sitemap.xml and robots.txt
+## Todo
+- [x] Add login/register pages
+- [ ] Add user profile page
+- [x] Protect admin routes
+- [ ] Add admin dashboard
+- [ ] Generate sitemap.xml and robots.txt
+- [ ] Use prepared statements to improve query performance
