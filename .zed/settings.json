@@ -1,69 +1,20 @@
 {
 	"tab_size": 2,
 	"hard_tabs": true,
-	"formatter": "language_server",
-	"git": {
-		"inline_blame": {
-			"enabled": false
+	"lsp": {
+		"biome": {
+			"settings": {
+				"config_path": "./biome.json"
+			}
 		}
 	},
-	"language_servers": ["!eslint", "!typescript-language-server", "..."],
-	"languages": {
-		"JavaScript": {
-			"formatter": {
-				"external": {
-					"command": "./node_modules/.bin/biome",
-					"arguments": [
-						"check",
-						"--stdin-file-path",
-						"{buffer_path}",
-						"--write",
-						"--unsafe"
-					]
-				}
-			}
-		},
-		"TypeScript": {
-			"formatter": {
-				"external": {
-					"command": "./node_modules/.bin/biome",
-					"arguments": [
-						"check",
-						"--stdin-file-path",
-						"{buffer_path}",
-						"--write",
-						"--unsafe"
-					]
-				}
-			}
-		},
-		"TSX": {
-			"formatter": {
-				"external": {
-					"command": "./node_modules/.bin/biome",
-					"arguments": [
-						"check",
-						"--stdin-file-path",
-						"{buffer_path}",
-						"--write",
-						"--unsafe"
-					]
-				}
-			}
-		},
-		"JSON": {
-			"formatter": {
-				"external": {
-					"command": "./node_modules/.bin/biome",
-					"arguments": [
-						"check",
-						"--stdin-file-path",
-						"{buffer_path}",
-						"--write",
-						"--unsafe"
-					]
-				}
-			}
+	"formatter": {
+		"language_server": {
+			"name": "biome"
 		}
+	},
+	"code_actions_on_format": {
+		"source.fixAll.biome": true,
+		"source.organizeImports.biome": true
 	}
 }

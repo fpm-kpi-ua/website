@@ -2,27 +2,13 @@
 
 import { and, desc, eq, max, sql } from "drizzle-orm";
 import { db } from "~/drizzle/db";
+import { p_readArticle, p_sectionPreview } from "~/drizzle/prepared-queries";
 import { t_articles } from "~/drizzle/schema";
 import type { InsertArticle } from "~/shared/schemas";
 import type { Lang, Section } from "~/shared/types";
 
 export function getArticlePreviews(lang: Lang, section: Section) {
-	return db
-		.select({
-			slug: t_articles.slug,
-			title: t_articles.title,
-			description: t_articles.description,
-		})
-		.from(t_articles)
-		.where(
-			and(
-				eq(t_articles.lang, lang),
-				eq(t_articles.section, section),
-				eq(t_articles.isActive, true),
-			),
-		)
-		.orderBy(t_articles.title)
-		.all();
+	return p_sectionPreview.all({ lang, section });
 }
 
 export function getAdminArticlePreviews(lang: Lang, section: Section) {
@@ -67,25 +53,7 @@ export function getAdminArticlePreviews(lang: Lang, section: Section) {
 }
 
 export function getReadArticle(lang: Lang, section: Section, slug: string) {
-	return db
-		.select({
-			title: t_articles.title,
-			description: t_articles.description,
-			keywords: t_articles.keywords,
-			html: t_articles.html,
-			lang: t_articles.articleLang,
-		})
-		.from(t_articles)
-		.where(
-			and(
-				eq(t_articles.lang, lang),
-				eq(t_articles.section, section),
-				eq(t_articles.slug, slug),
-				eq(t_articles.isActive, true),
-			),
-		)
-		.limit(1)
-		.all()[0];
+	return p_readArticle.get({ lang, section, slug });
 }
 
 export function getEditArticle(
@@ -106,8 +74,7 @@ export function getEditArticle(
 			),
 		)
 		.orderBy(t_articles.isActive)
-		.limit(1)
-		.all()[0];
+		.get();
 }
 
 export function getArticleHistory(lang: Lang, section: Section, slug: string) {

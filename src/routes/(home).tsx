@@ -1,5 +1,5 @@
 import { Meta, Title } from "@solidjs/meta";
-import { type RouteLoadFuncArgs, createAsync } from "@solidjs/router";
+import { type RouteDefinition, createAsync } from "@solidjs/router";
 import { For } from "solid-js";
 import { ArticleCard, ArticleCardWithIcon } from "~/components/article-card";
 import { ProcessorIcon } from "~/components/icons/processor-icon";
@@ -10,9 +10,8 @@ import { getNewsPreview } from "~/shared/news.server";
 import { getTranslations, useTranslation } from "~/shared/use-translation";
 import "./(home).css";
 
-export const route = {
-	load: ({ params }: RouteLoadFuncArgs) =>
-		getTranslations(parseLang(params.lang), "home"),
+export const route: RouteDefinition = {
+	preload: ({ params }) => getTranslations(parseLang(params.lang), "home"),
 };
 
 export default function Home() {

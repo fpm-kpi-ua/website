@@ -1,7 +1,8 @@
 import { action, cache, json, redirect } from "@solidjs/router";
-import { desc, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getRequestEvent } from "solid-js/web";
 import { db } from "~/drizzle/db";
+import { p_getNewsList, p_getNewsPreview } from "~/drizzle/prepared-queries";
 import { t_news } from "~/drizzle/schema";
 import { checkAccessRights } from "~/shared/check-access-rights.server";
 import { insertNewsSchema } from "~/shared/schemas";
@@ -11,33 +12,12 @@ import { getLang } from "./server-utils";
 
 export const getNewsPreview = cache(async (lang: Lang) => {
 	"use server";
-	return db
-		.select({
-			id: t_news.id,
-			title: t_news.title,
-			preview: t_news.preview,
-			createdAt: t_news.createdAt,
-		})
-		.from(t_news)
-		.where(eq(t_news.lang, lang))
-		.orderBy(desc(t_news.createdAt))
-		.limit(3)
-		.all();
+	return p_getNewsPreview.all({ lang, limit: 3 });
 }, "news-preview");
 
 export const getNews = cache(async (lang: Lang) => {
 	"use server";
-	return db
-		.select({
-			id: t_news.id,
-			title: t_news.title,
-			html: t_news.html,
-			createdAt: t_news.createdAt,
-		})
-		.from(t_news)
-		.where(eq(t_news.lang, lang))
-		.orderBy(desc(t_news.createdAt))
-		.all();
+	return p_getNewsList.all({ lang });
 }, "news");
 
 export const getEditNews = cache(async (id: number) => {

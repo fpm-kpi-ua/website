@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
 	"files": {
 		"ignore": [
 			"node_modules/**",
@@ -18,10 +18,8 @@
 	},
 	"linter": {
 		"rules": {
-			"recommended": true,
 			"nursery": {
-				"useSortedClasses": "error",
-				"noReactSpecificProps": "error"
+				"useSortedClasses": "error"
 			},
 			"a11y": {
 				"noSvgWithoutTitle": "off"
@@ -31,7 +29,11 @@
 				"useJsxKeyInIterable": "off"
 			},
 			"style": {
-				"noNonNullAssertion": "off"
+				"noNonNullAssertion": "off",
+				"noDefaultExport": "off"
+			},
+			"suspicious": {
+				"noReactSpecificProps": "error"
 			}
 		}
 	}

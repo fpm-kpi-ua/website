@@ -12,26 +12,27 @@ type Modules = {
 	admin: typeof adminDict;
 };
 
-export const getTranslations = cache(
-	async <T extends keyof Modules>(lang: Lang, module: T) => {
-		const { default: dict } = (await import(
-			`../locales/${lang}/${module}.ts`
-		)) as {
-			default: Modules[T];
-		};
-		return i18n.flatten(dict);
-	},
-	"translations",
-);
+export const getServerTranslations = async <T extends keyof Modules>(
+	lang: Lang,
+	module: T,
+) => {
+	const { default: dict } = (await import(
+		`../locales/${lang}/${module}.ts`
+	)) as {
+		default: Modules[T];
+	};
+	return i18n.flatten(dict);
+};
+
+export const getTranslations = cache(getServerTranslations, "translations");
 
 export const useTranslation = <T extends keyof Modules = "common">(
 	module = "common" as T,
 ) => {
 	const lang = () => parseLang(useLocation().pathname.split("/")[1]);
 	const dict = createAsync(() => getTranslations(lang(), module));
-	const t = i18n.translator<i18n.Flatten<Modules[T]>>(
-		dict,
-		i18n.resolveTemplate,
-	) as i18n.Translator<i18n.Flatten<Modules[T]>>;
+	const t = i18n.translator(dict, i18n.resolveTemplate) as i18n.Translator<
+		i18n.Flatten<Modules[T]>
+	>;
 	return { t, lang };
 };

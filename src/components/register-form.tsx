@@ -1,11 +1,11 @@
 import { action, redirect, useSubmission } from "@solidjs/router";
 import { hash } from "argon2";
-import { eq } from "drizzle-orm";
 import { Show, createEffect, createSignal } from "solid-js";
 import { For } from "solid-js/web";
 import { Input } from "~/components/input";
 import { Select } from "~/components/select";
 import { db } from "~/drizzle/db";
+import { p_getUserByEmail } from "~/drizzle/prepared-queries";
 import {
 	t_admins,
 	t_contentManagers,
@@ -18,7 +18,10 @@ import { existingRoles } from "~/shared/constants";
 import { langLink } from "~/shared/lang";
 import { insertUserSchema } from "~/shared/schemas";
 import { getLang } from "~/shared/server-utils";
-import { getTranslations, useTranslation } from "~/shared/use-translation";
+import {
+	getServerTranslations,
+	useTranslation,
+} from "~/shared/use-translation";
 import { validate } from "~/shared/validate.server";
 
 const register = action(async (data: FormData) => {
@@ -27,13 +30,9 @@ const register = action(async (data: FormData) => {
 	const lang = getLang();
 
 	const insertUser = await validate(insertUserSchema, data, lang);
-	const locales = await getTranslations(lang, "common");
+	const locales = await getServerTranslations(lang, "common");
 
-	const alreadyExists = db
-		.select()
-		.from(t_users)
-		.where(eq(t_users.email, insertUser.email))
-		.get();
+	const alreadyExists = p_getUserByEmail.get({ email: insertUser.email });
 	if (alreadyExists)
 		throw { validation: { email: locales["auth.userAlreadyExists"] } };
 	const salt = Math.random().toString(36).slice(2);

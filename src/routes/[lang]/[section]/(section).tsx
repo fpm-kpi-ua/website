@@ -1,6 +1,6 @@
 import { Meta, Title } from "@solidjs/meta";
 import {
-	type RouteLoadFuncArgs,
+	type RouteDefinition,
 	cache,
 	createAsync,
 	useParams,
@@ -23,8 +23,8 @@ const getSectionPreview = cache(async (lang: Lang, section: Section) => {
 	return getArticlePreviews(lang, section);
 }, "sections");
 
-export const route = {
-	load: ({ params }: RouteLoadFuncArgs) => {
+export const route: RouteDefinition = {
+	preload: ({ params }) => {
 		getSectionPreview(parseLang(params.lang), params.section as Section);
 	},
 };
@@ -54,7 +54,7 @@ export default function Sections() {
 					<Show when={images[params.section].first?.path}>
 						<li class={images[params.section].first.class}>
 							<ThemedIcon
-								path={images[params.section].first.path}
+								path={images[params.section].first?.path}
 								class="h-fit"
 							/>
 						</li>
@@ -64,7 +64,7 @@ export default function Sections() {
 							<>
 								<Show when={images[params.section][i()]?.path}>
 									<li class={images[params.section][i()].class}>
-										<ThemedIcon path={images[params.section][i()].path} />
+										<ThemedIcon path={images[params.section][i()]?.path} />
 									</li>
 								</Show>
 								<li>
@@ -82,7 +82,7 @@ export default function Sections() {
 					</For>
 					<Show when={images[params.section].last?.path}>
 						<li class={images[params.section].last.class}>
-							<ThemedIcon path={images[params.section].last.path} />
+							<ThemedIcon path={images[params.section].last?.path} />
 						</li>
 					</Show>
 				</ul>

@@ -1,6 +1,6 @@
 import { Meta, Title } from "@solidjs/meta";
 import {
-	type RouteLoadFuncArgs,
+	type RouteDefinition,
 	cache,
 	createAsync,
 	useParams,
@@ -18,8 +18,8 @@ const getArticle = cache(async (lang: Lang, section: Section, slug: string) => {
 	return getReadArticle(lang, section, slug);
 }, "article");
 
-export const route = {
-	load: ({ params }: RouteLoadFuncArgs) => {
+export const route: RouteDefinition = {
+	preload: ({ params }) => {
 		getArticle(parseLang(params.lang), params.section as Section, params.slug);
 	},
 };
@@ -42,7 +42,7 @@ export default function Article() {
 			<Meta name="keywords" content={article()?.keywords ?? ""} />
 			<article
 				class="prose mx-auto max-w-max-page-width"
-				lang={article()?.lang}
+				lang={article()?.articleLang}
 				innerHTML={article()?.html}
 			/>
 		</>

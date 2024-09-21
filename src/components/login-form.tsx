@@ -1,16 +1,17 @@
 import { action, redirect, useSubmission } from "@solidjs/router";
 import { verify } from "argon2";
-import { eq } from "drizzle-orm";
 import { createEffect } from "solid-js";
 import { Input } from "~/components/input";
-import { db } from "~/drizzle/db";
-import { t_users } from "~/drizzle/schema";
+import { p_getUserByEmail } from "~/drizzle/prepared-queries";
 import { checkAccessRights } from "~/shared/check-access-rights.server";
 import { langLink } from "~/shared/lang";
 import { loginSchema } from "~/shared/schemas";
 import { getLang } from "~/shared/server-utils";
 import { getUserSession, revalidateSession } from "~/shared/session.server";
-import { getTranslations, useTranslation } from "~/shared/use-translation";
+import {
+	getServerTranslations,
+	useTranslation,
+} from "~/shared/use-translation";
 import { validate } from "~/shared/validate.server";
 
 const login = action(async (data: FormData) => {
@@ -19,9 +20,9 @@ const login = action(async (data: FormData) => {
 	const session = await getUserSession();
 	const lang = getLang();
 	const { email, password } = await validate(loginSchema, data, lang);
-	const locales = await getTranslations(lang, "common");
+	const locales = await getServerTranslations(lang, "common");
 
-	const user = db.select().from(t_users).where(eq(t_users.email, email)).get();
+	const user = p_getUserByEmail.get({ email });
 
 	const invalidEmailOrPass = {
 		validation: {

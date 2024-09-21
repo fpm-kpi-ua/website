@@ -1,6 +1,6 @@
 import {
 	A,
-	type RouteLoadFuncArgs,
+	type RouteDefinition,
 	type RouteSectionProps,
 	createAsync,
 } from "@solidjs/router";
@@ -9,8 +9,8 @@ import { parseLang } from "~/shared/lang";
 import { getNews } from "~/shared/news.server";
 import { useTranslation } from "~/shared/use-translation";
 
-export const route = {
-	load: ({ params }: RouteLoadFuncArgs) => {
+export const route: RouteDefinition = {
+	preload: ({ params }) => {
 		getNews(parseLang(params.lang));
 	},
 };

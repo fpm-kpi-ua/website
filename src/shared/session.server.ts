@@ -1,17 +1,8 @@
 "use server";
 import { useSession } from "vinxi/http";
-import { db } from "~/drizzle/db";
+import { p_getUserInfo } from "~/drizzle/prepared-queries";
 
-type UserSession = {
-	id: number;
-	email: string;
-	isSuperAdmin: boolean;
-	isAdmin: boolean;
-	isContentManager: boolean;
-	isTeacher: boolean;
-	isStudent: boolean;
-	updatedAt: number;
-};
+type UserSession = ReturnType<typeof p_getUserInfo.get> & { updatedAt: number };
 
 export async function getUserSession() {
 	const session = await useSession<UserSession>({
@@ -35,39 +26,16 @@ function shouldRevalidateSession(session: { readonly data: UserSession }) {
 export async function revalidateSession(
 	session: {
 		readonly data: UserSession;
-		update: (
-			update:
-				| Partial<UserSession>
-				| ((oldData: UserSession) => Partial<UserSession> | undefined),
-		) => Promise<unknown>;
+		update: (update: UserSession) => Promise<unknown>;
 		clear: () => Promise<unknown>;
 	},
 	userId?: number,
 ) {
-	const user = await db.query.t_users.findFirst({
-		where: (users, { eq }) => eq(users.id, session?.data?.id ?? userId),
-		with: {
-			admin: true,
-			teacher: true,
-			student: true,
-			contentManager: true,
-		},
-	});
-
+	const user = p_getUserInfo.get({ id: session?.data?.id ?? userId });
+	console.log(user);
 	if (!user || !user.isActive) {
 		await session.clear();
 		return;
 	}
-
-	const updatedSession: UserSession = {
-		id: user.id,
-		email: user.email,
-		isSuperAdmin: !!user.admin?.superAdmin,
-		isAdmin: !!user.admin,
-		isContentManager: !!user.contentManager,
-		isTeacher: !!user.teacher,
-		isStudent: !!user.student,
-		updatedAt: Date.now(),
-	};
-	await session.update(updatedSession);
+	await session.update(Object.assign(user, { updatedAt: Date.now() }));
 }

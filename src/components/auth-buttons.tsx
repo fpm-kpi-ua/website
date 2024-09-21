@@ -1,5 +1,5 @@
 import { action, createAsync, json } from "@solidjs/router";
-import { Match, Switch } from "solid-js";
+import { Match, Switch, createEffect } from "solid-js";
 import { userCache } from "~/shared/cache";
 import { langLink } from "~/shared/lang";
 import { getUserSession } from "~/shared/session.server";
@@ -15,7 +15,7 @@ const logout = action(async () => {
 
 export function AuthButtons() {
 	const user = createAsync(() => userCache());
-
+	createEffect(() => console.log(user()));
 	const { t, lang } = useTranslation();
 
 	return (
