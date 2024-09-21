@@ -1,5 +1,4 @@
 import { action, redirect, useSubmission } from "@solidjs/router";
-import { verify } from "argon2";
 import { createEffect } from "solid-js";
 import { Input } from "~/components/input";
 import { p_getUserByEmail } from "~/drizzle/prepared-queries";
@@ -31,7 +30,10 @@ const login = action(async (data: FormData) => {
 		},
 	};
 	if (!user) throw invalidEmailOrPass;
-	const isValid = await verify(user.password, password + user.salt);
+	const isValid = await Bun.password.verify(
+		password + user.salt,
+		user.password,
+	);
 	if (!isValid) throw invalidEmailOrPass;
 	if (!user.isActive)
 		throw { validation: { email: locales["auth.accountNotActive"] } };

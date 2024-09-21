@@ -1,5 +1,4 @@
 import { action, redirect, useSubmission } from "@solidjs/router";
-import { hash } from "argon2";
 import { Show, createEffect, createSignal } from "solid-js";
 import { For } from "solid-js/web";
 import { Input } from "~/components/input";
@@ -36,7 +35,7 @@ const register = action(async (data: FormData) => {
 	if (alreadyExists)
 		throw { validation: { email: locales["auth.userAlreadyExists"] } };
 	const salt = Math.random().toString(36).slice(2);
-	const hashedPass = await hash(insertUser.password + salt);
+	const hashedPass = await Bun.password.hash(insertUser.password + salt);
 	const user = db
 		.insert(t_users)
 		.values({ ...insertUser, password: hashedPass, salt })
